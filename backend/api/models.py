@@ -7,39 +7,47 @@ from django.utils import timezone
 
 class UserManager(BaseUserManager):
 
-    def create_user(self, email, password):
-        if not email:
-            raise '邮箱地址不能为空'
-        user = self.model(email=self.normalize_email(
-            email), last_login=timezone.now())
+    def create_user(self, username, password):
+        if not (username):
+            raise '用户名不能为空'
+        user = self.model(
+            username = username,
+            # email=self.normalize_email(email),
+            # email = email,
+            # mobile = mobile,
+            last_login=timezone.now()
+        )
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, password):
-        user = self.create_user(email, password)
+    def create_superuser(self, username, password):
+        user = self.create_user(username, password)
         user.is_admin = True
         user.save(using=self._db)
         return user
 
 
 class User(AbstractBaseUser):
-
-    email = models.EmailField(primary_key=True, max_length=255, unique=True)
+    username = models.CharField(max_length=255, unique=True, verbose_name='用户名')
+    email = models.EmailField(max_length=255, blank=True, null=True, unique=True)
     cellphone = models.CharField(
-        max_length=11, verbose_name='手机号', blank=True, null=True)
+        max_length=11, verbose_name='手机号', blank=True, null=True, unique=True)
     volunteer_or_not = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
     objects = UserManager()
 
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = 'username'
 
+    class Meta:
+        verbose_name_plural = '用户信息'
+        
     def is_staff(self):
         return self.is_admin
 
     def __str__(self):
-        return self.email
+        return self.username
 
     def has_module_perms(self, api):
         return True
@@ -49,11 +57,11 @@ class User(AbstractBaseUser):
 
     def get_short_name(self):
         # The user is identified by their email address
-        return self.email
+        return self.username
 
     def get_full_name(self):
         # The user is identified by their email address
-        return self.email
+        return self.username
 
 
 # 单图片上传

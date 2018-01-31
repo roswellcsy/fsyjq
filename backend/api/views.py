@@ -12,7 +12,8 @@ class CampaignViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticated, )
 
 
-class UserViewSet(viewsets.ModelViewSet):
+# class UserViewSet(viewsets.ModelViewSet):
+class UserViewSet(viewsets.ReadOnlyModelViewSet): # list+ detail
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = (permissions.IsAuthenticated, )
