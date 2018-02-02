@@ -10,9 +10,10 @@
       <!-- <x-button type="primary" action-type="button" link="">登出</x-button> -->
       </group>
       <group title="服务信息">
-        <cell title="我的专业咨询" link="/proAdv/index"></cell>
-        <cell title="我的公益活动" link="/campaign/list"></cell>
-        <cell title="我的志愿服务" link="/volServ/index"></cell>
+        <cell title="我的政策咨询" link="/personal/userPolicyQA"></cell>
+        <cell title="我的专业咨询" link="/personal/userProAdv"></cell>
+        <cell title="我的公益活动" link="/perosonal/userCampaign"></cell>
+        <cell title="我的志愿服务" link="/personal/userVolServ"></cell>
       </group>
       <group style="padding:5px 20px;">
         <x-button type="primary" action-type="button" @click.native.prevent="handleFedLogOut">登出</x-button>

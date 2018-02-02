@@ -5,7 +5,31 @@ import 'nprogress/nprogress.css'// Progress 进度条样式
 // import { Message } from 'element-ui'
 import { getToken } from '@/utils/auth' // 验权
 
-const whiteList = ['/login', '/register'] // 不重定向白名单
+const whiteList = [
+  '/login',
+  '/register',
+  '/login/index',
+  '/register/index',
+  '/policy',
+  '/policy/index',
+  '/policy/policyList',
+  '/charitycampaign',
+  '/charitycampaign/index',
+  '/campaign/list',
+  '/campaign/detail',
+  '/volServ/index',
+  '/volServ/traningList',
+  '/volServ/trainingDetail',
+  '/volServ/serviceList',
+  '/volServ/serviceDetail',
+  '/shareplatform',
+  '/shareplatform/index',
+  '/policy/juzhuzheng',
+  '/policy/huji',
+  '/policy/jisheng',
+  '/policy/zhufang',
+  '/policy/zinvjiaoyu'
+] // 不重定向白名单
 router.beforeEach((to, from, next) => {
   NProgress.start()
   if (getToken()) { // 判断是否有token
@@ -35,7 +59,7 @@ router.beforeEach((to, from, next) => {
     if (whiteList.indexOf(to.path) !== -1) { // 在免登录白名单，直接进入
       next()
     } else {
-      next('/login') // 无论如何最终都是重定向到/login页面
+      next('/login') // 不在白名单，无论如何最终都是重定向到/login页面
       NProgress.done()
     }
   }

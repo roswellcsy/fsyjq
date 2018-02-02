@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from rest_framework import serializers
-from .models import User, Campaign
+from .models import User, Campaign, PolicyQA
+import datetime
 
 # 多对多需要嵌套，下方是例子
 """
@@ -40,8 +41,7 @@ class AlbumSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
 
-    # campaigns = serializers.PrimaryKeyRelatedField(
-    #     many=True, queryset=Campaign.objects.all())
+    # policyqas = serializers.PrimaryKeyRelatedField(queryset=PolicyQA.objects.all())
 
     class Meta:
         model = User
@@ -53,6 +53,7 @@ class UserSerializer(serializers.ModelSerializer):
             username=validated_data['username'],
             cellphone=validated_data['cellphone'],
             email=validated_data['email'],
+            # policyqas=validated_data['policyqas']
         )
         user.set_password(validated_data['password'])
         user.save()
@@ -67,3 +68,30 @@ class CampaignSerializer(serializers.ModelSerializer):
     class Meta:
         model = Campaign
         fields = ('title', 'person', 'date')
+
+# 政策咨询
+class PolicyQASerializer(serializers.ModelSerializer):
+
+    qa_user = serializers.SlugRelatedField(
+        slug_field=User.USERNAME_FIELD, queryset=User.objects.all())
+    class Meta:
+        model = PolicyQA
+        fields = (
+            'id',
+            'qa_fullname',
+            'qa_sex',
+            'qa_age',
+            'qa_live_area',
+            'qa_cellphone',
+            'qa_occupation',
+            'qa_marriage',
+            'qa_title',
+            'qa_type',
+            'qa_content',
+            'qa_o2o',
+            'qa_ask_date',
+            'qa_answer',
+            'qa_answer_date',
+            'qa_user'
+        )
+        # extra_kwargs = {'password': {'write_only': True}}

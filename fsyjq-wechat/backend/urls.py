@@ -21,6 +21,7 @@ from rest_framework_jwt.views import obtain_jwt_token, verify_jwt_token
 
 router = DefaultRouter()
 router.register(r'campaign', api_views.CampaignViewSet)
+router.register(r'policyqa', api_views.PolicyQAViewSet, 'policyqa')
 router.register(r'user', api_views.UserViewSet, 'user')
 
 urlpatterns = [

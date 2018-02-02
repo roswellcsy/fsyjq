@@ -15,6 +15,9 @@
     <group style="padding:5px 20px;">
       <x-button type="primary" action-type="button" @click.native.prevent="handleRegister">注册</x-button>
     </group>
+    <group style="padding:5px 20px;">
+      <x-button type="primary" action-type="button" link="/login">返回登录</x-button>
+    </group>
     <!-- <div class="tips">
         <span style="margin-left:40%;">请先注册</span>
         <span> password: admin</span>

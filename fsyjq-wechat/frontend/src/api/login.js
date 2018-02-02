@@ -19,7 +19,7 @@ export function login(username, password) { // 登录
 
 export function getInfo(username, token) { // 拉取用户信息
   return request({
-    url: '/user/', // 获取admin信息，后期需要改成带用户名参数
+    url: '/user/', // 获取admin信息，带用户名参数
     method: 'get',
     params: {
       username,

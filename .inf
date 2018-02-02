@@ -1,0 +1,91 @@
+# fsyjq
+##  佛山禅城一家亲公众号
+
+# 参考佛山新市民公众号
+# 内容来源http://www.fslgb.gov.cn
+
+#   服务政策
+#   http://119.145.135.223/Mobile/Article/ArticleList.aspx?UserID=3&OpenID=oWmDUs9htw0zlnZ3ccdO-E1-YA4g&KeyWord=%E6%9C%8D%E5%8A%A1%E6%94%BF%E7%AD%96
+#   服务站查询
+#   禅城区
+##  http://119.145.135.223/Mobile/Station/TownList.aspx?DistrictID=2
+#   南海区
+##  http://119.145.135.223/Mobile/Station/TownList.aspx?DistrictID=3
+#   顺德区
+##  http://119.145.135.223/Mobile/Station/TownList.aspx?DistrictID=4
+#   高明区
+##  http://119.145.135.223/Mobile/Station/TownList.aspx?DistrictID=5
+#   三水区
+##  http://119.145.135.223/Mobile/Station/TownList.aspx?DistrictID=6
+
+
+一、政策，1政策信息（直接扣）2办理（直接连过去）3对政策疑问的留言板块（网民留言，我们后台看，线下咨询再回复）。
+1、个人信息：（必填）姓名，性别-选项，年龄-区间选择，（选填）居住区域（社区）-选项，联系方式，职业-选项，婚姻状况-选项
+
+二、公益服务，1社工服务预告（预告+报名）2公益信息宣传3专业咨询（留言问题，个人信息，后台线下回复）。
+一级——公益服务
+二级——1公益活动——滑动公益活动菜单，点击去看详情和报名
+1）参考祖庙街道微服务中心（小组/工作坊服务，下级列表清单式服务）
+2）填写个人信息报名，后台回复确认是否成功，多种方式通知，线下为主
+2专业服务——滑动公益活动菜单，点击去看详情和报名
+1）个案服务，填资料表单（待确认），服务方式（线上留言，线下服务点）
+3志愿服务——志愿者登记（表单待确认）
+          ——志愿者培训（活动清单，内容表单，报名）
+          ——志愿服务报名（类个人信息）
+三、共享平台（这个我想搞d与众不同的，不需要实用哇众取宠的东西）1服务拼团，2闲置物品共享
+
+参考：
+1、佛山新市民公众号
+2、阳光微社区
+3、祖庙街道微服务中心（进入平台）
+
+todo:
+1、政策信息爬虫，做成网页
+2、政策留言板块（客服）
+3、公益服务（2周）
+4、共享平台
+
+
+
+
+
+信息技术咨询服务;软件服务
+计算机技术开发、技术服务
+软件开发
+
+--registry=https://registry.npm.taobao.org
+
+
+账号：3288859925@qq.com   密码：SLSG20171019
+
+
+AppID:wx05429a8ee93be82d
+
+AppSecret:
+5012ec05c9c049bcfed217767e635efa
+
+3288859925@qq.com
+
+
+
+https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wx05429a8ee93be82d&secret=5012ec05c9c049bcfed217767e635efa
+
+"oisaP0yMMtkCuakC1ILDw90bmq0o", 
+"oisaP07QI2akzQSKFOKyyMJzeIuE", 
+"oisaP06z2pfZoxMKDK358eG57WS8", 
+"oisaP0_byyVG3C-fZnsii8sokT-A", 
+"oisaP0wnl3_sG6muxBiZG1b0cxpU"
+
+
+
+部署架构
+80->root->dist-> index.html
+8000->后端API，自己的端口
+
+环境部署
+python = 3.6.3
+pyenv
+pyenv virtualenv
+$ curl -sL https://deb.nodesource.com/setup_t.x | sudo -E bash -
+t=8
+sudo apt-get install nodejs build-essential

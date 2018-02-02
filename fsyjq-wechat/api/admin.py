@@ -71,6 +71,8 @@ admin.site.register(User, UserAdmin)
 
 admin.site.unregister(Group)
 
+admin.site.register(PolicyQA)
+
 
 class ProfessionalAdviceAdmin(admin.ModelAdmin):
         # readonly_fields = ['user_subscribe_time', 'nickname', 'user_city',

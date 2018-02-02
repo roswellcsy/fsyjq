@@ -21,6 +21,8 @@ export default {
 </script>
 
 <style scoped>
-
+#AppMain {
+  margin-bottom: 57px;
+}
 </style>
 

@@ -32,38 +32,38 @@ import Layout from '../views/layout/Layout'
  */
 export const constantRouterMap = [
   { path: '/404', component: _import('404'), hidden: true },
-  // { // 登录
-  //   path: '/login',
-  //   component: Layout,
-  //   redirect: '/login/index',
-  //   name: 'login',
-  //   hidden: true,
-  //   children: [
-  //     {
-  //       path: '/login/index',
-  //       name: 'login',
-  //       component: _import('login/index'),
-  //       meta: { title: '登录' }
-  //     }
-  //   ]
-  // },
-  // { // 注册
-  //   path: '/register',
-  //   component: Layout,
-  //   redirect: '/register/index',
-  //   name: 'register',
-  //   hidden: true,
-  //   children: [
-  //     {
-  //       path: '/register/index',
-  //       name: 'register',
-  //       component: _import('register/index'),
-  //       meta: { title: '注册' }
-  //     }
-  //   ]
-  // },
-  { path: '/login', component: _import('login/index') },
-  { path: '/register', component: _import('register/index') },
+  { // 登录
+    path: '/login',
+    component: Layout,
+    redirect: '/login/index',
+    name: 'login',
+    hidden: true,
+    children: [
+      {
+        path: '/login/index',
+        name: 'login',
+        component: _import('login/index'),
+        meta: { title: '登录' }
+      }
+    ]
+  },
+  { // 注册
+    path: '/register',
+    component: Layout,
+    redirect: '/register/index',
+    name: 'register',
+    hidden: true,
+    children: [
+      {
+        path: '/register/index',
+        name: 'register',
+        component: _import('register/index'),
+        meta: { title: '注册' }
+      }
+    ]
+  },
+  // { path: '/login', component: _import('login/index') },
+  // { path: '/register', component: _import('register/index') },
   {
     path: '/',
     // component: _import('layout/init'),
@@ -77,13 +77,31 @@ export const constantRouterMap = [
         name: 'userInfo',
         component: _import('personal/userInfo'),
         meta: { title: '主页' }
+      },
+      {
+        path: 'personal/userPolicyQA',
+        name: 'userPolicyQA',
+        component: _import('personal/userPolicyQA'),
+        meta: { title: '我的政策咨询' }
+      },
+      {
+        path: 'personal/userProAdv',
+        name: 'userProAdv',
+        component: _import('personal/userProAdv'),
+        meta: { title: '我的专业咨询' }
+      },
+      {
+        path: 'personal/userCampaign',
+        name: 'userCampaign',
+        component: _import('personal/userCampaign'),
+        meta: { title: '我的公益活动' }
+      },
+      {
+        path: 'personal/userVolServ',
+        name: 'userVolServ',
+        component: _import('personal/userVolServ'),
+        meta: { title: '我的公益活动' }
       }
-      // {
-      //   path: '/shareplatform',
-      //   name: 'shareplatform',
-      //   component: _import('shareplatform'),
-      //   meta: { title: '共享平台' }
-      // }
     ]
   },
   { // 政策相关的路由
@@ -110,6 +128,36 @@ export const constantRouterMap = [
         component: _import('policy/policyQa'),
         // redirect: '/policy/index',
         name: 'policyQa'
+      },
+      {
+        path: '/policy/juzhuzheng',
+        component: _import('policy/juzhuzheng'),
+        // redirect: '/policy/index',
+        name: 'juzhuzheng'
+      },
+      {
+        path: '/policy/huji',
+        component: _import('policy/huji'),
+        // redirect: '/policy/index',
+        name: 'huji'
+      },
+      {
+        path: '/policy/jisheng',
+        component: _import('policy/jisheng'),
+        // redirect: '/policy/index',
+        name: 'jisheng'
+      },
+      {
+        path: '/policy/zhufang',
+        component: _import('policy/zhufang'),
+        // redirect: '/policy/index',
+        name: 'zhufang'
+      },
+      {
+        path: '/policy/zinvjiaoyu',
+        component: _import('policy/zinvjiaoyu'),
+        // redirect: '/policy/index',
+        name: 'zinvjiaoyu'
       }
     ]
   },

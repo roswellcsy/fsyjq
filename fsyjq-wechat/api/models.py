@@ -86,15 +86,38 @@ class SingleUploadImg(models.Model):
 class PolicyQA(models.Model):
     class Meta:
         verbose_name_plural = '政策咨询'
-    qa_title = models.CharField(max_length=255, verbose_name='提问标题')
+    # 咨询人信息
+    qa_fullname = models.CharField(max_length=10, verbose_name='姓名')
+
+    qa_sex = models.CharField(max_length=1, verbose_name='性别') # 1男2女
+
+    qa_age = models.PositiveIntegerField(verbose_name='年龄', null=True, blank=True)
+
+    qa_live_area = models.CharField(max_length=255, verbose_name='居住区域', null=True, blank=True)
+
+    qa_cellphone = models.CharField(max_length=11, verbose_name='联系方式', null=True, blank=True)
+
+    qa_occupation = models.CharField(max_length=50, verbose_name='职业', null=True, blank=True)
+
+    qa_marriage = models.CharField(max_length=50, verbose_name='婚姻状况', null=True, blank=True)
+    # 咨询内容
+    qa_title = models.CharField(max_length=255, verbose_name='标题')
+
+    qa_type = models.TextField(verbose_name='类型', null=True, blank=True)
+
     qa_content = models.CharField(max_length=255, verbose_name='提问内容')
-    qa_answer = models.CharField(max_length=255, verbose_name='回答')
+
+    qa_o2o = models.CharField(max_length=1, verbose_name='线上线下回复')
+    # 只在我的咨询显示
     qa_ask_date = models.DateTimeField(
-        verbose_name='提问时间', null=True, blank=True)
+        verbose_name='提问时间', auto_now_add=True)
+    # 答复信息，只在我的咨询显示
+    qa_answer = models.TextField(verbose_name='回答', null=True, blank=True)
+
     qa_answer_date = models.DateTimeField(
         verbose_name='回答时间', null=True, blank=True)
     # 与用户关系是一对一
-    qa_user = models.ForeignKey(User, verbose_name='用户', blank=True)
+    qa_user = models.ForeignKey(User, related_name='policyqas', verbose_name='用户')
 
 
 # 专业咨询，不注册也可以提
