@@ -21,7 +21,7 @@ class PolicyQAViewSet(viewsets.ModelViewSet):
         by filtering against a `username` query parameter in the URL.
         """
         """
-        重写get_queryset，只返回与用户名一致的信息
+        重写get_queryset，只返回username参数的咨询，其他viewset类似
         """
         queryset = PolicyQA.objects.all()
         username = self.request.query_params.get('username', None)
