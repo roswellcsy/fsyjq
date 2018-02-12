@@ -42,6 +42,9 @@ class AlbumSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
 
     # policyqas = serializers.PrimaryKeyRelatedField(queryset=PolicyQA.objects.all())
+    """
+    说明:只保留最基础的数据，外链数据一律不能加，否则会出问题
+    """
 
     class Meta:
         model = User
@@ -72,6 +75,7 @@ class CampaignSerializer(serializers.ModelSerializer):
 # 政策咨询
 class PolicyQASerializer(serializers.ModelSerializer):
 
+    # slug_field是以外键的某个值作为关联
     qa_user = serializers.SlugRelatedField(
         slug_field=User.USERNAME_FIELD, queryset=User.objects.all())
     class Meta:
