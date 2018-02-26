@@ -124,6 +124,12 @@ export const constantRouterMap = [
         name: 'policyList'
       },
       {
+        path: '/policy/policyJifen',
+        component: _import('policy/policyJifen'),
+        // redirect: '/policy/index',
+        name: 'policyJifen'
+      },
+      {
         path: '/policy/policyQa',
         component: _import('policy/policyQa'),
         // redirect: '/policy/index',

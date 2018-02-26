@@ -7,7 +7,7 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 
-from api.models import User, PolicyQA, SingleUploadImg, ProfessionalAdvice, Campaign, VolunteerRegistration, VolunteerService, AbilityTraining
+from api.models import User, PolicyQA, SingleUploadImg, ProfessionalAdvice, Campaign, CampaignPerson, VolunteerInformation, VolunteerService, AbilityTraining
 
 
 class UserCreationForm(forms.ModelForm):
@@ -122,30 +122,32 @@ class CampaignAdmin(admin.ModelAdmin):
 
 admin.site.register(Campaign, CampaignAdmin)
 
+admin.site.register(CampaignPerson)
 
-class VolunteerRegistrationAdmin(admin.ModelAdmin):
+
+class VolunteerInformationAdmin(admin.ModelAdmin):
         # readonly_fields = ['user_subscribe_time', 'nickname', 'user_city',
     #                    'user_country', 'user_province', 'user_language',
     #                    'user_subscribe_time']
     readonly_fields = []
     fieldsets = [
-        ('志愿者基本信息', {'fields': ['volregi_name', 'volregi_sex', 'volregi_age',
-                                'volregi_jiguan', 'volregi_live_address', 'volregi_marriage', 'volregi_idcard_type',
-                                'volregi_id_num', 'volregi_birthday', 'volregi_email', 'volregi_graduate_school',
-                                'volregi_graduate_date', 'volregi_education', 'volregi_profession', 'volregi_employer',
-                                'volregi_position', 'volregi_mail_address', 'volregi_zipcode', 'volregi_contact_number',
-                                'volregi_cellphone'
+        ('志愿者基本信息', {'fields': ['volinfo_name', 'volinfo_sex', 'volinfo_age',
+                                'volinfo_jiguan', 'volinfo_live_address', 'volinfo_marriage', 'volinfo_idcard_type',
+                                'volinfo_id_num', 'volinfo_birthday', 'volinfo_email', 'volinfo_graduate_school',
+                                'volinfo_graduate_date', 'volinfo_education', 'volinfo_profession', 'volinfo_employer',
+                                'volinfo_position', 'volinfo_mail_address', 'volinfo_zipcode', 'volinfo_contact_number',
+                                'volinfo_cellphone'
                                 ]}),
         ('志愿信息', {'fields': [
-         'volregi_service_area', 'volregi_service_date', 'volregi_skills']}),
-        ('关联用户', {'fields': ['volregi_user']}),
+         'volinfo_service_area', 'volinfo_service_date', 'volinfo_skills']}),
+        ('关联用户', {'fields': ['volinfo_user']}),
     ]
-    list_display = ('volregi_name', 'volregi_sex', 'volregi_age',
-                    'volregi_cellphone', 'volregi_service_area')
+    list_display = ('volinfo_name', 'volinfo_sex', 'volinfo_age',
+                    'volinfo_cellphone', 'volinfo_service_area', 'volinfo_service_date')
     # 遗留问题:想要在详细信息里列出姓名、性别和联系方式，因为不是field，会出错
 
 
-admin.site.register(VolunteerRegistration, VolunteerRegistrationAdmin)
+admin.site.register(VolunteerInformation, VolunteerInformationAdmin)
 
 
 class VolunteerServiceAdmin(admin.ModelAdmin):
@@ -177,5 +179,4 @@ class AbilityTrainingAdmin(admin.ModelAdmin):
                     'at_sign_up_deadline', 'at_counts', 'user_list')
 
         
-
 admin.site.register(AbilityTraining, AbilityTrainingAdmin)

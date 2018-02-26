@@ -56,8 +56,8 @@ MIDDLEWARE = [
 ]
 
 CORS_ORIGIN_WHITELIST = (
-    #'*'
-    '127.0.0.1:8080',# 请求的域名
+    # '*'
+    '127.0.0.1:8080',  # 请求的域名
     'localhost:8080',
     'localhost',
     'localhost:9528',
@@ -91,16 +91,17 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'fsyjq',
+        'NAME': 'fsyjq-dev',
         'OPTIONS': {
             'charset': 'utf8mb4',
-            # 'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
         },
         # 'USER': 'fsyjq',
-        'USER': 'root',
+        'USER': 'fsyjqdev',
         'PASSWORD': 'P@ssw0rd',
         # 'HOST': 'rm-wz9ec4kz5ildi1t96o.mysql.rds.aliyuncs.com',
-        'HOST': 'localhost',
+        # 'HOST': 'localhost',
+        'HOST': 'rm-wz9857sgx78431278o.mysql.rds.aliyuncs.com',
         'PORT': '3306',
     }
 }

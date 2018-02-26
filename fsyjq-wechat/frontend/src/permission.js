@@ -28,7 +28,8 @@ const whiteList = [
   '/policy/huji',
   '/policy/jisheng',
   '/policy/zhufang',
-  '/policy/zinvjiaoyu'
+  '/policy/zinvjiaoyu',
+  '/policy/policyJifen'
 ] // 不重定向白名单
 router.beforeEach((to, from, next) => {
   NProgress.start()
