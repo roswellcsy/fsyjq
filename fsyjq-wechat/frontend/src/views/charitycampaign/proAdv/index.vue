@@ -1,53 +1,65 @@
 <!--用于填写专业咨询问题及信息 -->
 <template>
   <div id ='ProAdv'>
-    <group title="初始信息">
+    <group title="咨询信息">
       <cell title="标题" value="value">
-        <x-input v-model="policyQaform.title"></x-input>
+        <x-input v-model="proAdvform.title"></x-input>
+      </cell>
+      <cell title="类型" value="value">
+        <x-input v-model="proAdvform.type"></x-input>
       </cell>
       <cell title="内容" value="value">
-        <x-textarea v-model="policyQaform.content" height="100" placeholder="咨询内容"></x-textarea>
+        <x-textarea v-model="proAdvform.content" height="100" placeholder="咨询内容"></x-textarea>
       </cell>
+    </group>
+    <group title="基本信息">
       <cell title="姓名" value="value">
-        <x-input v-model="policyQaform.fullname"></x-input>
+        <x-input v-model="proAdvform.fullname"></x-input>
       </cell>
       <cell title="性别" value="value">
-        <checker v-model="policyQaform.sex" default-item-class="sex-item" selected-item-class="sex-item-selected">
+        <checker v-model="proAdvform.sex" default-item-class="sex-item" selected-item-class="sex-item-selected">
           <checker-item value="1">男</checker-item>
           <checker-item value="2">女</checker-item>
         </checker>
       </cell>
       <cell title="年龄" value="value">
-        <x-input v-model="policyQaform.age"></x-input>
+        <x-input v-model="proAdvform.age"></x-input>
       </cell>
-      <cell title="居住区域" value="value">
-        <x-input v-model="policyQaform.livearea"></x-input>
+      <cell title="户籍所在地" value="value">
+        <x-input v-model="proAdvform.household"></x-input>
       </cell>
-      <cell title="联系方式" value="value">
-        <x-input v-model="policyQaform.cellphone" :max="11"></x-input>
+      <cell title="身份证明" value="value">
+        <x-input v-model="proAdvform.idnum" :max="11"></x-input>
+      </cell>
+      <cell title="民族" value="value">
+        <x-input v-model="proAdvform.ethnic"></x-input>
+      </cell>
+      <cell title="政治面貌" value="value">
+        <x-input v-model="proAdvform.political"></x-input>
+      </cell>
+      <cell title="宗教" value="value">
+        <x-input v-model="proAdvform.religion"></x-input>
       </cell>
       <cell title="职业" value="value">
-        <x-input v-model="policyQaform.occupation"></x-input>
+        <x-input v-model="proAdvform.occupation"></x-input>
+      </cell>
+      <cell title="就读年级" value="value">
+        <x-input v-model="proAdvform.studygrade"></x-input>
+      </cell>
+      <cell title="文化程度" value="value">
+        <x-input v-model="proAdvform.degree"></x-input>
+      </cell>
+      <cell title="所在社区" value="value">
+        <x-input v-model="proAdvform.community"></x-input>
+      </cell>
+      <cell title="联系方式" value="value">
+        <x-input v-model="proAdvform.contact"></x-input>
+      </cell>
+      <cell title="家庭住址" value="value">
+        <x-input v-model="proAdvform.liveaddress"></x-input>
       </cell>
       <cell title="婚姻状况" value="value">
-        <x-input v-model="policyQaform.marriage"></x-input>
-      </cell>
-    </group>
-    <group title="咨询内容">
-      <cell title="标题" value="value">
-        <x-input v-model="policyQaform.title"></x-input>
-      </cell>
-      <cell title="类型" value="value">
-        <x-input v-model="policyQaform.type"></x-input>
-      </cell>
-      <cell title="内容" value="value">
-        <x-textarea v-model="policyQaform.content" height="100" placeholder="咨询内容"></x-textarea>
-      </cell>
-      <cell title="线上/线下" value="value">
-        <checker v-model="policyQaform.o2o" default-item-class="o2o-item" selected-item-class="o2o-item-selected">
-          <checker-item value="1">线上</checker-item>
-          <checker-item value="2">线下</checker-item>
-        </checker>
+        <x-input v-model="proAdvform.marriage"></x-input>
       </cell>
     </group>
     <group style="padding:5px 20px;">
@@ -65,18 +77,25 @@ export default {
   components: { Group, Cell, XInput, XTextarea, Checker, CheckerItem, XButton },
   data() {
     return {
-      policyQaform: {
-        fullname: '',
-        sex: '',
-        age: '',
-        livearea: '',
-        cellphone: '',
-        occupation: '',
-        marriage: '',
+      proAdvform: {
         title: '',
         type: '',
         content: '',
-        o2o: ''
+        fullname: '',
+        sex: '',
+        age: '',
+        household: '',
+        idnum: '',
+        ethnic: '',
+        political: '',
+        religion: '',
+        occupation: '',
+        studygrade: '',
+        degree: '',
+        community: '',
+        contact: '',
+        liveaddress: '',
+        marriage: ''
       }
     }
   },
@@ -84,31 +103,45 @@ export default {
     handleCommitroadvform() {
       // console.log(this.sex) // vue获取的是标签的value
       // console.log(this.o2o)
-      const qa_fullname = this.policyQaform.fullname
-      const qa_sex = this.policyQaform.sex
-      const qa_age = this.policyQaform.age
-      const qa_live_area = this.policyQaform.livearea
-      const qa_cellphone = this.policyQaform.cellphone
-      const qa_occupation = this.policyQaform.occupation
-      const qa_marriage = this.policyQaform.marriage
-      const qa_title = this.policyQaform.title
-      const qa_type = this.policyQaform.type
-      const qa_content = this.policyQaform.content
-      const qa_o2o = this.policyQaform.o2o
-      const qa_user = this.$store.getters.username
+      const proadv_question_title = this.proAdvform.title
+      const proadv_question_type = this.proAdvform.type
+      const proadv_question_content = this.proAdvform.content
+      const proadv_full_name = this.proAdvform.fullname
+      const proadv_sex = this.proAdvform.sex
+      const proadv_age = this.proAdvform.age
+      const proadv_house_hold = this.proAdvform.household
+      const proadv_id_num = this.proAdvform.idnum
+      const proadv_ethnic = this.proAdvform.ethnic
+      const proadv_political_status = this.proAdvform.political
+      const proadv_religion = this.proAdvform.religion
+      const proadv_occupation = this.proAdvform.occupation
+      const proadv_studying_grade = this.proAdvform.studygrade
+      const proadv_degree_of_education = this.proAdvform.degree
+      const proadv_community = this.proAdvform.community
+      const proadv_contact = this.proAdvform.contact
+      const proadv_live_address = this.proAdvform.liveaddress
+      const proadv_marriage = this.proAdvform.marriage
+      const proadv_user = this.$store.getters.username
       commitProadvform(
-        qa_user,
-        qa_fullname,
-        qa_sex,
-        qa_age,
-        qa_live_area,
-        qa_cellphone,
-        qa_occupation,
-        qa_marriage,
-        qa_title,
-        qa_type,
-        qa_content,
-        qa_o2o
+        proadv_user,
+        proadv_question_title,
+        proadv_question_type,
+        proadv_question_content,
+        proadv_full_name,
+        proadv_sex,
+        proadv_age,
+        proadv_house_hold,
+        proadv_id_num,
+        proadv_ethnic,
+        proadv_political_status,
+        proadv_religion,
+        proadv_occupation,
+        proadv_studying_grade,
+        proadv_degree_of_education,
+        proadv_community,
+        proadv_contact,
+        proadv_live_address,
+        proadv_marriage
       ).then(response => { // mockserver返回20000和包在data的token，实际后端只返回token
         this.$router.push({ path: '/' })
       }).catch(error => {
@@ -121,7 +154,7 @@ export default {
 </script>
 
 <style scoped>
-/* .sex-item {
+.sex-item {
   width: 100px;
   height: 26px;
   line-height: 26px;
@@ -132,21 +165,7 @@ export default {
   margin-right: 6px;
 }
 .sex-item-selected {
-  background: #ffffff url(../../assets/active.png) no-repeat right bottom;
+  background: #ffffff url(../../../assets/active.png) no-repeat right bottom;
   border-color: #ff4a00;
 }
-.o2o-item {
-  width: 100px;
-  height: 26px;
-  line-height: 26px;
-  text-align: center;
-  border-radius: 3px;
-  border: 1px solid #ccc;
-  background-color: #fff;
-  margin-right: 6px;
-}
-.o2o-item-selected {
-  background: #ffffff url(../../assets/active.png) no-repeat right bottom;
-  border-color: #ff4a00;
-} */
 </style>

@@ -65,7 +65,7 @@ class User(AbstractBaseUser):
         return self.username
 
 
-# 单图片上传
+# 单图片上传，提供公益活动使用
 class SingleUploadImg(models.Model):
     class Meta:
         verbose_name_plural = '单图片上传'
@@ -75,7 +75,7 @@ class SingleUploadImg(models.Model):
     campaign_or_service_name = models.CharField(
         max_length=50, verbose_name='活动名称')
     photo_name = models.CharField(max_length=10, verbose_name='照片名字')
-    photo = models.ImageField('图片', upload_to='media')
+    photo = models.ImageField('图片', upload_to='')
 
 
 # # 政策文章
@@ -90,7 +90,11 @@ class PolicyQA(models.Model):
     # 咨询人信息
     qa_fullname = models.CharField(max_length=10, verbose_name='姓名')
 
-    qa_sex = models.CharField(max_length=1, verbose_name='性别')  # 1男2女
+    sex = (
+        ('1', '男'),
+        ('2', '女'),
+    )
+    qa_sex = models.CharField(max_length=1, choices=sex, verbose_name='性别')  # 1男2女
 
     qa_age = models.PositiveIntegerField(
         verbose_name='年龄', null=True, blank=True)
@@ -103,17 +107,37 @@ class PolicyQA(models.Model):
 
     qa_occupation = models.CharField(
         max_length=50, verbose_name='职业', null=True, blank=True)
-
+    marriage_status = (
+        ('1', '未婚'),
+        ('2', '已婚'),
+        ('3', '离异'),
+        ('4', '丧偶'),
+    )
     qa_marriage = models.CharField(
-        max_length=50, verbose_name='婚姻状况', null=True, blank=True)
+        max_length=1, choices=marriage_status, verbose_name='婚姻状况', null=True, blank=True)
     # 咨询内容
     qa_title = models.CharField(max_length=255, verbose_name='标题')
 
-    qa_type = models.TextField(verbose_name='类型', null=True, blank=True)
+    type_options = (
+        ('1', '居住证及相关'),
+        ('2', '户籍及相关'),
+        ('3', '计生及相关'),
+        ('4', '住房及相关'),
+        ('5', '子女教育及相关'),
+        ('6', '积分制及相关'),
+        ('7', '综合类（多种问题）'),
+    )
 
-    qa_content = models.CharField(max_length=255, verbose_name='提问内容')
+    qa_type = models.CharField(max_length=1, choices=type_options, verbose_name='类型', null=True, blank=True)
 
-    qa_o2o = models.CharField(max_length=1, verbose_name='线上线下回复')
+    qa_content = models.TextField(verbose_name='提问内容')
+
+    o2o_type = (
+        ('1', '线上'),
+        ('2', '线下'),
+    )
+
+    qa_o2o = models.CharField(max_length=1, choices=o2o_type, verbose_name='线上线下回复')
     # 只在我的咨询显示
     qa_ask_date = models.DateTimeField(
         verbose_name='提问时间', auto_now_add=True)
@@ -122,6 +146,9 @@ class PolicyQA(models.Model):
 
     qa_answer_date = models.DateTimeField(
         verbose_name='回答时间', null=True, blank=True)
+
+    # 咨询状态,默认False未回答,后台回答后可选True
+    qa_status = models.BooleanField(default=False, verbose_name='咨询状态')
     # 与用户关系是一对一
     qa_user = models.ForeignKey(
         User, related_name='policyqas', verbose_name='用户')
@@ -139,32 +166,44 @@ class ProfessionalAdvice(models.Model):
     proadv_user = models.ForeignKey(User, verbose_name='用户')
     proadv_question_title = models.CharField(
         max_length=255, verbose_name='咨询问题')
-    proadv_question_content = models.CharField(
-        max_length=255, verbose_name='咨询内容')
+    proadv_question_content = models.TextField(
+        verbose_name='咨询内容')
 
     # 对象基本信息
     proadv_full_name = models.CharField(
         max_length=10, verbose_name='姓名')
     # '1'代表男，'2'代表女
     sex = (
-        ('男', '男'),
-        ('女', '女'),
+        ('1', '男'),
+        ('2', '女'),
     )
     proadv_sex = models.CharField(
         max_length=1, choices=sex, verbose_name='性别')
-    proadv_age = models.CharField(
-        max_length=20, blank=True, verbose_name='年龄')
+    proadv_age = models.PositiveIntegerField(
+        null=True, blank=True, verbose_name='年龄')
     proadv_house_hold = models.CharField(
         max_length=50, blank=True, verbose_name='户籍所在地')
     # (6)身份证明
     proadv_id_num = models.CharField(
         max_length=50, blank=True, verbose_name='身份证明')
     # (7)民族
+    ethnic_options = (
+        ('1', '汉族'),
+        ('2', '少数民族'),
+        ('3', '其他'),
+    )
     proadv_ethnic = models.CharField(
-        max_length=50, blank=True, verbose_name='民族')
+        max_length=1, choices=ethnic_options, blank=True, verbose_name='民族')
     # (8)政治面貌
+    political_options = (
+        ('1', '中共党员'),
+        ('2', '民主党派成员'),
+        ('3', '共青团员'),
+        ('4', '群众'),
+        ('5', '其他'),
+    )
     proadv_political_status = models.CharField(
-        max_length=50, blank=True, verbose_name='政治面貌')
+        max_length=1, choices=political_options, blank=True, verbose_name='政治面貌')
     # (9)宗教
     proadv_religion = models.CharField(
         max_length=50, blank=True, verbose_name='宗教')
@@ -187,23 +226,34 @@ class ProfessionalAdvice(models.Model):
     proadv_live_address = models.CharField(
         max_length=50, blank=True, verbose_name='家庭住址')
     marriage_status = (
-        ('1', '单身'),
-        ('2', '同居'),
-        ('3', '已婚'),
-        ('4', '分居'),
-        ('5', '离婚'),
-        ('6', '丧偶'),
-        ('7', '其它'),
+        ('1', '未婚'),
+        ('2', '已婚'),
+        ('3', '离异'),
+        ('4', '丧偶'),
     )
     proadv_marriage = models.CharField(
         max_length=1, choices=marriage_status, blank=True, verbose_name='婚姻状况')
 
     # 个案基本信息
+    from_options = (
+        ('1', '社工发现'),
+        ('2', '本人求助'),
+        ('3', '他人求助'),
+        ('4', '他人介绍'),
+        ('5', '机构转介'),
+        ('6', '其    他'),
+    )
     proadv_from = models.CharField(
-        max_length=255, verbose_name='个案来源')
-
+        max_length=1, choices=from_options, verbose_name='个案来源')
+    rescue_options = (
+        ('1', '来    信'),
+        ('2', '来    电'),
+        ('3', '面    访'),
+        ('4', '网上求助'),
+        ('5', '其    他'),
+    )
     proadv_rescue_methods = models.CharField(
-        max_length=255, verbose_name='求助方法')
+        max_length=1, choices=rescue_options, verbose_name='求助方法')
 
     question_type = (
         ('1', '亲子关系问题'),
@@ -244,28 +294,33 @@ class ProfessionalAdvice(models.Model):
         max_length=1, choices=result, blank=True, verbose_name='咨询结果')
 
     # 负责方信息
-    proadv_sw_name = models.CharField(max_length=50, verbose_name='社工姓名')
-    proadv_case_id = models.CharField(max_length=50, verbose_name='个案编号')
-    proadv_date = models.DateField('咨询日期')
+    proadv_sw_name = models.CharField(null=True, blank=True, max_length=50, verbose_name='社工姓名')
+    proadv_case_id = models.CharField(null=True, blank=True, max_length=50, verbose_name='个案编号')
+    proadv_date = models.DateField(null=True, blank=True, verbose_name='咨询日期')
 
     # 咨询记录
-    proadv_serv_date = models.DateField('服务日期')
-    proadv_serv_time = models.TimeField('服务时间')
+    proadv_serv_date = models.DateField(null=True, blank=True, verbose_name='服务日期')
+    proadv_serv_time = models.TimeField(null=True, blank=True, verbose_name='服务时间')
     proadv_serv_localtion = models.CharField(
-        max_length=255, verbose_name='服务地点')
+        null=True, blank=True, max_length=255, verbose_name='服务地点')
     proadv_serv_counts = models.PositiveSmallIntegerField(
         default=0, verbose_name='服务次数')
-    proadv_serv_type = models.CharField(max_length=255, verbose_name='服务方式')
-    proadv_serv_content = models.TextField('服务内容')
+    serv_type_options = (
+        ('1', '面谈'),
+        ('2', '电访'),
+        ('3', '其他'),
+    )
+    proadv_serv_type = models.CharField(null=True, blank=True, max_length=1, choices=serv_type_options, verbose_name='服务方式')
+    proadv_serv_content = models.TextField(null=True, blank=True, verbose_name='服务内容')
 
-    # 个案状态,默认True开启,后台可选False
-    proadv_status = models.BooleanField(default=True, verbose_name='个案状态')
+    # 个案完成状态,默认False开启,后台可选True关闭
+    proadv_status = models.BooleanField(default=False, verbose_name='个案完成状态')
 
     def status(self):
         if self.proadv_status == True:
-            return '开启'
+            return '完成'
         elif self.proadv_status == False:
-            return '关闭'
+            return '待跟进'
 
 
 # 活动报名人
@@ -290,56 +345,7 @@ class CampaignPerson(models.Model):
         max_length=11, verbose_name='手机号', blank=True, null=True)
     # 与用户一一对应关系
     campaign_person_user = models.ForeignKey(
-        User, related_name='campaignperson', verbose_name='用户')
-    
-
-
-# 活动，需要后台上传图片
-class Campaign(models.Model):
-    class Meta:
-        verbose_name_plural = '公益活动'
-
-    def __str__(self):
-        return self.campaign_name
-
-    # 活动名称
-    campaign_name = models.CharField(max_length=50, verbose_name='活动名称')
-    # 活动分类,小组类，活动类，其他
-    TYPE = (
-        ('1', '小组类'),
-        ('2', '活动类'),
-        ('3', '其他'),
-    )
-    campaign_type = models.CharField(
-        max_length=50, choices=TYPE, verbose_name='活动分类')
-    # 活动时间
-    campaign_date = models.DateTimeField('活动时间')
-    # 服务对象
-    campaign_client = models.CharField(max_length=50, verbose_name='服务对象')
-    # 活动地点
-    campaign_address = models.CharField(max_length=50, verbose_name='活动地点')
-    # 活动内容
-    campaign_content = models.CharField(max_length=255, verbose_name='活动内容')
-    # 服务费用
-    campaign_paid = models.CharField(max_length=50, verbose_name='服务费用')
-    # 活动图片
-    photos = models.ManyToManyField(
-        SingleUploadImg, blank=True, verbose_name='活动图片')
-    # 报名截止日期
-    campaign_signup_deadline = models.DateTimeField('报名截止时间')
-    # 联系方式
-    campaign_contact = models.CharField(max_length=50, verbose_name='活动联系方式')
-    # 可报名人数
-    campaign_counts = models.PositiveSmallIntegerField(verbose_name='可报名总人数')
-    # 报名人员
-    signup_user_list = models.ManyToManyField(
-        CampaignPerson, blank=True, verbose_name='报名人员名单')
-
-    def user_list(self):
-        return ','.join(['姓名:' + i.campaign_person_name + ',性别:' + i.campaign_person_sex + ',联系方式:' + i.campaign_person_cellphone for i in self.signup_user_list.all()])
-    user_list.short_description = '报名人员名单'
-
-# 志愿者登记,用Profile,onetoonefiled来新增
+        User, null=True, blank=True, related_name='campaignperson', verbose_name='用户')
 
 
 class VolunteerInformation(models.Model):
@@ -349,7 +355,7 @@ class VolunteerInformation(models.Model):
     def __str__(self):
         return self.volinfo_name
     # 志愿者信息
-    volinfo_user = models.ForeignKey(User, verbose_name='平台用户')
+    volinfo_user = models.ForeignKey(User, null=True, blank=True, verbose_name='平台用户')
     #(1)姓名
     volinfo_name = models.CharField(max_length=20, verbose_name='姓名')
     # def volinfo_name(self):
@@ -357,8 +363,8 @@ class VolunteerInformation(models.Model):
     # volinfo_name.short_description = '姓名'
     #(2)性别 值为1时是男性，值为2时是女性，值为0时是未知
     SEX = (
-        ('男', '男'),
-        ('女', '女'),
+        ('1', '男'),
+        ('2', '女'),
     )
     volinfo_sex = models.CharField(
         max_length=1, choices=SEX, verbose_name='性别')
@@ -369,8 +375,8 @@ class VolunteerInformation(models.Model):
     #     elif self.volinfo_user.user_sex == '2':
     #         return '女'
     # volinfo_sex.short_description = '性别'
-    volinfo_age = models.CharField(
-        max_length=2, blank=True, verbose_name='年龄')
+    volinfo_age = models.PositiveIntegerField(
+        null=True, blank=True, verbose_name='年龄')
 
     #(3)籍贯
     volinfo_jiguan = models.CharField(
@@ -380,13 +386,10 @@ class VolunteerInformation(models.Model):
         max_length=100, blank=True, verbose_name='住址')
     #(5)婚姻状况(已婚未婚)
     marriage_status = (
-        ('1', '单身'),
-        ('2', '同居'),
-        ('3', '已婚'),
-        ('4', '分居'),
-        ('5', '离婚'),
-        ('6', '丧偶'),
-        ('7', '其它'),
+        ('1', '未婚'),
+        ('2', '已婚'),
+        ('3', '离异'),
+        ('4', '丧偶'),
     )
     volinfo_marriage = models.CharField(
         max_length=1, choices=marriage_status, blank=True, verbose_name='婚姻状况')
@@ -456,43 +459,64 @@ class VolunteerInformation(models.Model):
         max_length=50, blank=True, verbose_name='技能')
 
 
-# 志愿服务
-class VolunteerService(models.Model):
-    # 志愿服务信息
+# 公益活动信息，需要后台上传图片
+class Campaign(models.Model):
     class Meta:
-        verbose_name_plural = '志愿者服务'
-    # 志愿服务
-    # pass
-    # 服务主题
-    volserv_title = models.CharField(max_length=100, verbose_name='服务主题')
-    # 服务内容
-    volserv_content = models.CharField(max_length=200, verbose_name='服务内容')
+        verbose_name_plural = '公益活动信息'
+
+    def __str__(self):
+        return self.campaign_name
+
+    # 活动名称
+    campaign_name = models.CharField(max_length=50, verbose_name='活动名称')
+    # 活动分类,小组类，活动类，其他
+    TYPE = (
+        ('1', '小组类'),
+        ('2', '活动类'),
+        ('3', '其他'),
+    )
+    campaign_type = models.CharField(
+        max_length=50, choices=TYPE, verbose_name='活动分类')
+    # 活动时间
+    campaign_date = models.DateTimeField('活动时间')
     # 服务对象
-    volserv_client = models.CharField(max_length=100, verbose_name='服务对象')
-    # 服务地址
-    volserv_address = models.CharField(max_length=100, verbose_name='服务地址')
-    # 服务时间
-    volserv_date = models.DateTimeField('服务时间')
-    # 服务报名截止时间
-    volserv_signup_deadline = models.DateField('服务报名截止时间')
+    campaign_client = models.CharField(max_length=50, verbose_name='服务对象')
+    # 活动地点
+    campaign_address = models.CharField(max_length=50, verbose_name='活动地点')
+    # 活动内容
+    campaign_content = models.CharField(max_length=255, verbose_name='活动内容')
+    # 服务费用
+    campaign_paid = models.CharField(max_length=50, verbose_name='服务费用')
+    # 活动图片
+    photos = models.ManyToManyField(
+        SingleUploadImg, blank=True, verbose_name='活动图片')
+    # 报名截止日期
+    campaign_signup_deadline = models.DateTimeField('报名截止时间')
     # 联系方式
-    volserv_contact = models.CharField(max_length=100, verbose_name='服务联系方式')
-    # 可报名人数
-    volserv_counts = models.PositiveSmallIntegerField(verbose_name='可报名人数')
+    campaign_contact = models.CharField(max_length=50, verbose_name='活动联系方式')
+    # 可报名参与人数
+    campaign_counts = models.PositiveSmallIntegerField(verbose_name='可报名总人数')
+    # 可报名志愿者人数
+    campaign_vol_counts = models.PositiveSmallIntegerField(verbose_name='可报名志愿者人数')
     # 报名人员
-    signup_user_list = models.ManyToManyField(
+    # signup_user_list = models.ManyToManyField(
+    #     CampaignPerson, blank=True, verbose_name='报名人员名单')
+
+    # def user_list(self):
+    #     return ','.join(['姓名:' + i.campaign_person_name + ',性别:' + i.campaign_person_sex + ',联系方式:' + i.campaign_person_cellphone for i in self.signup_user_list.all()])
+    # user_list.short_description = '报名人员名单'
+    campaign_person = models.ManyToManyField(
+        CampaignPerson, blank=True, verbose_name='报名人员名单')
+    campaign_volunteer = models.ManyToManyField(
         VolunteerInformation, blank=True, verbose_name='报名志愿者名单')
 
-    def user_list(self):
-        return ','.join(['姓名:' + i.volinfo_name + ',性别:' + i.volinfo_sex + ',联系方式:' + i.volinfo_cellphone for i in self.signup_user_list.all()])
-    user_list.short_description = '报名志愿者名单'
-
+# 志愿者登记,用Profile,onetoonefiled来新增
 
 # 能力培训
 class AbilityTraining(models.Model):
     # 志愿者培训课程信息
     class Meta:
-        verbose_name_plural = '志愿者培训清单'
+        verbose_name_plural = '能力培训'
     # 志愿者培训
     # 主讲人
     at_zhu_jiang_ren = models.CharField(

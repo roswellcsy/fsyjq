@@ -7,7 +7,7 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 
-from api.models import User, PolicyQA, SingleUploadImg, ProfessionalAdvice, Campaign, CampaignPerson, VolunteerInformation, VolunteerService, AbilityTraining
+from api.models import User, PolicyQA, SingleUploadImg, ProfessionalAdvice, Campaign, CampaignPerson, VolunteerInformation, AbilityTraining
 
 
 class UserCreationForm(forms.ModelForm):
@@ -71,14 +71,38 @@ admin.site.register(User, UserAdmin)
 
 admin.site.unregister(Group)
 
-admin.site.register(PolicyQA)
+
+class PolicyQAAdmin(admin.ModelAdmin):
+    readonly_fields = ['qa_fullname', 'qa_sex', 'qa_age', 'qa_live_area', 'qa_cellphone', 
+                        'qa_occupation', 'qa_marriage', 'qa_ask_date', 'qa_title', 'qa_type', 'qa_content',
+                        'qa_o2o', 'qa_ask_date']
+    fieldsets = [
+        ('咨询人信息', {'fields': [
+         'qa_fullname', 'qa_sex', 'qa_age', 'qa_live_area', 'qa_cellphone', 'qa_occupation', 'qa_marriage']}),
+        ('咨询内容', {'fields': ['qa_title', 'qa_type', 'qa_content',
+                             'qa_o2o', 'qa_ask_date']}),
+        # 以上为前端填写内容
+        ('答复内容', {'fields': [
+         'qa_answer', 'qa_answer_date']}),
+    ]
+    list_display = ('qa_title', 'qa_type', 'qa_fullname',
+                    'qa_o2o', 'qa_status')
+
+
+admin.site.register(PolicyQA, PolicyQAAdmin)
 
 
 class ProfessionalAdviceAdmin(admin.ModelAdmin):
         # readonly_fields = ['user_subscribe_time', 'nickname', 'user_city',
     #                    'user_country', 'user_province', 'user_language',
     #                    'user_subscribe_time']
-    readonly_fields = []
+    readonly_fields = [
+        'proadv_user', 'proadv_question_type', 'proadv_question_title', 'proadv_question_content',
+        'proadv_full_name', 'proadv_sex', 'proadv_age',
+        'proadv_house_hold', 'proadv_id_num', 'proadv_ethnic', 'proadv_political_status',
+        'proadv_religion', 'proadv_occupation', 'proadv_studying_grade', 'proadv_degree_of_education',
+        'proadv_community', 'proadv_contact', 'proadv_live_address', 'proadv_marriage',                               
+    ]
     fieldsets = [
         ('初始信息', {'fields': [
          'proadv_user', 'proadv_question_type', 'proadv_question_title', 'proadv_question_content']}),
@@ -87,6 +111,7 @@ class ProfessionalAdviceAdmin(admin.ModelAdmin):
                                  'proadv_religion', 'proadv_occupation', 'proadv_studying_grade', 'proadv_degree_of_education',
                                  'proadv_community', 'proadv_contact', 'proadv_live_address', 'proadv_marriage',
                                  ]}),
+        # 以上为前端填写内容
         ('个案基本信息', {'fields': [
          'proadv_from', 'proadv_rescue_methods', 'proadv_social_rescue', 'proadv_result']}),
         ('负责方信息', {'fields': ['proadv_sw_name',
@@ -105,25 +130,31 @@ admin.site.register(ProfessionalAdvice, ProfessionalAdviceAdmin)
 
 admin.site.register(SingleUploadImg)
 
+class CampaignPersonInline(admin.TabularInline):
+    class Meta:
+        verbose_name_plural = '报名人员清单'
+    model = Campaign.campaign_person.through
+    extra = 5 #默认显示条目的数量
 
 class CampaignAdmin(admin.ModelAdmin):
     # readonly_fields = ['user_subscribe_time', 'nickname', 'user_city',
     #                    'user_country', 'user_province', 'user_language',
     #                    'user_subscribe_time']
+    inlines = [CampaignPersonInline,]
     fieldsets = [
         ('活动信息', {'fields': ['campaign_name', 'campaign_type', 'campaign_date', 'campaign_signup_deadline', 'campaign_client', 'campaign_address',
                              'campaign_content', 'campaign_paid',
-                             'campaign_contact', 'campaign_counts', 'photos']}),
-        ('报名人选', {'fields': ['signup_user_list']}),
+                             'campaign_contact', 'campaign_counts', 'campaign_vol_counts', 'photos']}),
+        # ('报名人选', {'fields': ['signup_user_list']}),
     ]
     list_display = ('campaign_name', 'campaign_type', 'campaign_date',
-                    'campaign_signup_deadline', 'campaign_counts', 'user_list')
+                    'campaign_signup_deadline', 'campaign_counts', 'campaign_vol_counts')
+           
 
 
 admin.site.register(Campaign, CampaignAdmin)
 
 admin.site.register(CampaignPerson)
-
 
 class VolunteerInformationAdmin(admin.ModelAdmin):
         # readonly_fields = ['user_subscribe_time', 'nickname', 'user_city',
@@ -150,26 +181,10 @@ class VolunteerInformationAdmin(admin.ModelAdmin):
 admin.site.register(VolunteerInformation, VolunteerInformationAdmin)
 
 
-class VolunteerServiceAdmin(admin.ModelAdmin):
-    fieldsets = [
-        ('志愿服务信息', {'fields': ['volserv_title', 'volserv_content', 'volserv_client', 'volserv_date', 'volserv_signup_deadline', 'volserv_address',
-                               'volserv_contact', 'volserv_counts']}),
-        ('报名人选', {'fields': ['signup_user_list']}),
-        # ('活动清单', {'fields': ('signup_user_list',)}),
-        # ('访问信息', {'fields': readonly_fields})
-        # ('访问信息',{'fields': ['user_access_token', 'user_access_time', 'user_refresh_token', 'user_refresh_time']}),
-    ]
-    list_display = ('volserv_title', 'volserv_client', 'volserv_signup_deadline', 'volserv_date',
-                    'volserv_address', 'volserv_counts', 'user_list')
-
-
-admin.site.register(VolunteerService, VolunteerServiceAdmin)
-
-
 class AbilityTrainingAdmin(admin.ModelAdmin):
     fieldsets = [
         ('志愿者培训课程信息', {'fields': ['at_zhu_jiang_ren', 'at_theme', 'at_date', 'at_content', 'at_address',
-                             'at_counts', 'at_sign_up_deadline']}),
+                                  'at_counts', 'at_sign_up_deadline']}),
         ('报名人选', {'fields': ['signup_user_list']}),
         # ('活动清单', {'fields': ('signup_user_list',)}),
         # ('访问信息', {'fields': readonly_fields})
@@ -178,5 +193,5 @@ class AbilityTrainingAdmin(admin.ModelAdmin):
     list_display = ('at_theme', 'at_date', 'at_zhu_jiang_ren',
                     'at_sign_up_deadline', 'at_counts', 'user_list')
 
-        
+
 admin.site.register(AbilityTraining, AbilityTrainingAdmin)

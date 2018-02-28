@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from rest_framework import serializers
-from .models import User, Campaign, PolicyQA
+from .models import User, Campaign, PolicyQA, ProfessionalAdvice, CampaignPerson, VolunteerInformation, AbilityTraining
 import datetime
 
 # 多对多需要嵌套，下方是例子
@@ -70,8 +70,39 @@ class CampaignSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Campaign
-        fields = ('title', 'person', 'date')
+        fields = ('campaign_name', 'campaign_type', 'campaign_date')
 
+# 专业咨询
+class ProfessionalAdviceSerializer(serializers.ModelSerializer):
+
+    # slug_field是以外键的某个值作为关联
+    proadv_user = serializers.SlugRelatedField(
+        slug_field=User.USERNAME_FIELD, queryset=User.objects.all())
+    class Meta:
+        model = ProfessionalAdvice
+        fields = (
+            'id',
+            'proadv_question_title',
+            'proadv_question_type',
+            'proadv_question_content',
+            'proadv_full_name',
+            'proadv_sex',
+            'proadv_age',
+            'proadv_house_hold',
+            'proadv_id_num',
+            'proadv_ethnic',
+            'proadv_political_status',
+            'proadv_religion',
+            'proadv_occupation',
+            'proadv_studying_grade',
+            'proadv_degree_of_education',
+            'proadv_community',
+            'proadv_contact',
+            'proadv_live_address',
+            'proadv_marriage',
+            'proadv_user'
+        )
+        # extra_kwargs = {'password': {'write_only': True}}
 # 政策咨询
 class PolicyQASerializer(serializers.ModelSerializer):
 
@@ -98,4 +129,55 @@ class PolicyQASerializer(serializers.ModelSerializer):
             'qa_answer_date',
             'qa_user'
         )
-        # extra_kwargs = {'password': {'write_only': True}}
+
+# 志愿者信息
+class VolunteerInformationSerializer(serializers.ModelSerializer):
+
+    # slug_field是以外键的某个值作为关联
+    volinfo_user = serializers.SlugRelatedField(
+        slug_field=User.USERNAME_FIELD, queryset=User.objects.all())
+    class Meta:
+        model = VolunteerInformation
+        fields = (
+            'id',
+            'volinfo_name',
+            'volinfo_sex',
+            'volinfo_age',
+            'volinfo_jiguan',
+            'volinfo_live_address',
+            'volinfo_marriage',
+            'volinfo_idcard_type',
+            'volinfo_id_num',
+            'volinfo_birthday',
+            'volinfo_email',
+            'volinfo_graduate_school',
+            'volinfo_graduate_date',
+            'volinfo_education',
+            'volinfo_profession',
+            'volinfo_employer',
+            'volinfo_position',
+            'volinfo_mail_address',
+            'volinfo_zipcode',
+            'volinfo_contact_number',
+            'volinfo_cellphone',
+            'volinfo_service_area',
+            'volinfo_service_date',
+            'volinfo_skills',
+            'volinfo_user'
+        )
+
+# 活动报名人信息
+class CampaignPersonSerializer(serializers.ModelSerializer):
+
+    # slug_field是以外键的某个值作为关联
+    campaign_person_user = serializers.SlugRelatedField(
+        slug_field=User.USERNAME_FIELD, queryset=User.objects.all())
+    class Meta:
+        model = CampaignPerson
+        fields = (
+            'id',
+            'campaign_person_name',
+            'campaign_person_sex',
+            'campaign_person_cellphone',
+            'campaign_person_user'
+        )

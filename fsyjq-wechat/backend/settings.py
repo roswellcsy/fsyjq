@@ -97,11 +97,10 @@ DATABASES = {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
         },
         # 'USER': 'fsyjq',
-        'USER': 'fsyjqdev',
-        'PASSWORD': 'P@ssw0rd',
-        # 'HOST': 'rm-wz9ec4kz5ildi1t96o.mysql.rds.aliyuncs.com',
+        'USER': 'fsyjq',
+        'PASSWORD': 'Gdkyit2018%',
+        'HOST': 'rm-wz9ec4kz5ildi1t96o.mysql.rds.aliyuncs.com',
         # 'HOST': 'localhost',
-        'HOST': 'rm-wz9857sgx78431278o.mysql.rds.aliyuncs.com',
         'PORT': '3306',
     }
 }
