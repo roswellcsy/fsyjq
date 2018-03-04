@@ -9,6 +9,6 @@
 __pycache__/
 local_settings.py
 ## setting ##
-settings.py
+## settings.py
 
 remind.txt
