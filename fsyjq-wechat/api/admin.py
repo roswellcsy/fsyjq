@@ -7,7 +7,7 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 
-from api.models import User, PolicyQA, SingleUploadImg, ProfessionalAdvice, Campaign, CampaignPerson, VolunteerInformation, AbilityTraining
+from api.models import User, PolicyQA, ProfessionalAdvice, SingleUploadImg, Campaign, UserInformation, VolunteerInformation, AbilityTraining
 
 
 class UserCreationForm(forms.ModelForm):
@@ -16,7 +16,7 @@ class UserCreationForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('username', 'cellphone', 'email')
+        fields = ('username', )
 
     def clean_password2(self):
         password1 = self.cleaned_data.get('password1')
@@ -38,38 +38,49 @@ class UserChangeForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('username', 'cellphone', 'email', 'password')
+        fields = ('username', 'password')
 
     def clean_password(self):
         return self.initial['password']
 
+class UserInformationInline(admin.StackedInline):
+    model = UserInformation
+    verbose_name = '用户信息'
+
+class VolunteerInformationInline(admin.StackedInline):
+    model = VolunteerInformation
+    verbose_name = '志愿者信息'
 
 class UserAdmin(BaseUserAdmin):
     form = UserChangeForm
     add_form = UserCreationForm
+    
 
-    list_display = ('username', 'cellphone', 'email', 'is_admin')
+    list_display = ('username', 'is_admin')
     list_filter = ('is_admin',)
     fieldsets = (
-        (None, {'fields': ('username', 'cellphone', 'email', 'password')}),
+        (None, {'fields': ('username', 'password')}),
         ('Personal info', {'fields': ('last_login',)}),
         ('Permissions', {'fields': ('is_admin',)}),
     )
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('username', 'cellphone', 'last_login', 'password1', 'password2')}
+            'fields': ('username', 'last_login', 'password1', 'password2')}
          ),
     )
-    search_fields = ('cellphone',)
-    ordering = ('cellphone',)
+    # search_fields = ('cellphone',)
+    # ordering = ('cellphone',)
     filter_horizontal = ()
+    inlines = (UserInformationInline, VolunteerInformationInline)
 
 
 # Now register the new UserAdmin
+# admin.site.unregister(UserAdmin)
+# admin.site.register(UserInformation)
 admin.site.register(User, UserAdmin)
 
-admin.site.unregister(Group)
+# admin.site.unregister(Group)
 
 
 class PolicyQAAdmin(admin.ModelAdmin):
@@ -127,25 +138,50 @@ class ProfessionalAdviceAdmin(admin.ModelAdmin):
 
 admin.site.register(ProfessionalAdvice, ProfessionalAdviceAdmin)
 
-
 admin.site.register(SingleUploadImg)
 
-class CampaignPersonInline(admin.TabularInline):
-    class Meta:
-        verbose_name_plural = '报名人员清单'
-    model = Campaign.campaign_person.through
-    extra = 5 #默认显示条目的数量
+class CampaignPhotosInline(admin.TabularInline):
+    verbose_name = '活动照片'
+    verbose_name_plural = '活动照片'
+    # fieldsets = [
+    #     (
+    #         None,
+    #         {
+    #             'fields': ('campaign_person_name', 'campaign_person_sex', 'campaign_person_cellphone')
+    #         }
+    #     )
+    # ]
+    model = Campaign.photos.through
+    # model = CampaignPerson
+    extra = 1 #默认显示条目的数量
+
+
+class CampaignVolunteerInline(admin.TabularInline):
+    verbose_name = '报名志愿者清单'
+    verbose_name_plural = '报名志愿者清单'
+    model = Campaign.campaign_volunteers.through
+    # model = CampaignPerson
+    extra = 1 #默认显示条目的数量
+
+class CampaignMemberInline(admin.TabularInline):
+    verbose_name = '报名人员清单'
+    verbose_name_plural = '报名人员清单'
+    model = Campaign.campaign_members.through
+    # model = CampaignPerson
+    extra = 1 #默认显示条目的数量
+
 
 class CampaignAdmin(admin.ModelAdmin):
     # readonly_fields = ['user_subscribe_time', 'nickname', 'user_city',
     #                    'user_country', 'user_province', 'user_language',
     #                    'user_subscribe_time']
-    inlines = [CampaignPersonInline,]
+    inlines = [CampaignPhotosInline, CampaignVolunteerInline, CampaignMemberInline]
     fieldsets = [
         ('活动信息', {'fields': ['campaign_name', 'campaign_type', 'campaign_date', 'campaign_signup_deadline', 'campaign_client', 'campaign_address',
                              'campaign_content', 'campaign_paid',
-                             'campaign_contact', 'campaign_counts', 'campaign_vol_counts', 'photos']}),
+                             'campaign_contact', 'campaign_certified_hours', 'campaign_counts', 'campaign_vol_counts']}),
         # ('报名人选', {'fields': ['signup_user_list']}),
+        # ('报名人', {'fields': ['campaign_person']})
     ]
     list_display = ('campaign_name', 'campaign_type', 'campaign_date',
                     'campaign_signup_deadline', 'campaign_counts', 'campaign_vol_counts')
@@ -154,44 +190,62 @@ class CampaignAdmin(admin.ModelAdmin):
 
 admin.site.register(Campaign, CampaignAdmin)
 
-admin.site.register(CampaignPerson)
+# admin.site.register(CampaignPerson)
 
-class VolunteerInformationAdmin(admin.ModelAdmin):
-        # readonly_fields = ['user_subscribe_time', 'nickname', 'user_city',
-    #                    'user_country', 'user_province', 'user_language',
-    #                    'user_subscribe_time']
-    readonly_fields = []
-    fieldsets = [
-        ('志愿者基本信息', {'fields': ['volinfo_name', 'volinfo_sex', 'volinfo_age',
-                                'volinfo_jiguan', 'volinfo_live_address', 'volinfo_marriage', 'volinfo_idcard_type',
-                                'volinfo_id_num', 'volinfo_birthday', 'volinfo_email', 'volinfo_graduate_school',
-                                'volinfo_graduate_date', 'volinfo_education', 'volinfo_profession', 'volinfo_employer',
-                                'volinfo_position', 'volinfo_mail_address', 'volinfo_zipcode', 'volinfo_contact_number',
-                                'volinfo_cellphone'
-                                ]}),
-        ('志愿信息', {'fields': [
-         'volinfo_service_area', 'volinfo_service_date', 'volinfo_skills']}),
-        ('关联用户', {'fields': ['volinfo_user']}),
-    ]
-    list_display = ('volinfo_name', 'volinfo_sex', 'volinfo_age',
-                    'volinfo_cellphone', 'volinfo_service_area', 'volinfo_service_date')
-    # 遗留问题:想要在详细信息里列出姓名、性别和联系方式，因为不是field，会出错
+# class VolunteerInformationAdmin(admin.ModelAdmin):
+#         # readonly_fields = ['user_subscribe_time', 'nickname', 'user_city',
+#     #                    'user_country', 'user_province', 'user_language',
+#     #                    'user_subscribe_time']
+#     readonly_fields = []
+#     fieldsets = [
+#         ('志愿者基本信息', {'fields': ['volinfo_name', 'volinfo_sex', 'volinfo_age',
+#                                 'volinfo_jiguan', 'volinfo_live_address', 'volinfo_marriage', 'volinfo_idcard_type',
+#                                 'volinfo_id_num', 'volinfo_birthday', 'volinfo_email', 'volinfo_graduate_school',
+#                                 'volinfo_graduate_date', 'volinfo_education', 'volinfo_profession', 'volinfo_employer',
+#                                 'volinfo_position', 'volinfo_mail_address', 'volinfo_zipcode', 'volinfo_contact_number',
+#                                 'volinfo_cellphone'
+#                                 ]}),
+#         ('志愿信息', {'fields': [
+#          'volinfo_service_area', 'volinfo_service_date', 'volinfo_skills', 'volinfo_service_time']}),
+#         ('关联用户', {'fields': ['volinfo_user']}),
+#     ]
+#     list_display = ('volinfo_name', 'volinfo_sex', 'volinfo_age',
+#                     'volinfo_cellphone', 'volinfo_service_area', 'volinfo_service_date')
+#     # 遗留问题:想要在详细信息里列出姓名、性别和联系方式，因为不是field，会出错
 
 
-admin.site.register(VolunteerInformation, VolunteerInformationAdmin)
+# admin.site.register(VolunteerInformation, VolunteerInformationAdmin)
 
+class TrainingVolunteerInline(admin.TabularInline):
+    verbose_name = '报名志愿者清单'
+    verbose_name_plural = '报名志愿者清单'
+    # fieldsets = [
+    #     (
+    #         None,
+    #         {
+    #             'fields': ('campaign_person_name', 'campaign_person_sex', 'campaign_person_cellphone')
+    #         }
+    #     )
+    # ]
+    model = AbilityTraining.volunteers.through
+    # model = CampaignPerson
+    extra = 5 #默认显示条目的数量
 
 class AbilityTrainingAdmin(admin.ModelAdmin):
+    inlines = [TrainingVolunteerInline, ]
     fieldsets = [
         ('志愿者培训课程信息', {'fields': ['at_zhu_jiang_ren', 'at_theme', 'at_date', 'at_content', 'at_address',
                                   'at_counts', 'at_sign_up_deadline']}),
-        ('报名人选', {'fields': ['signup_user_list']}),
+        # ('报名人选', {'fields': ['signup_user_list']}),
         # ('活动清单', {'fields': ('signup_user_list',)}),
         # ('访问信息', {'fields': readonly_fields})
         # ('访问信息',{'fields': ['user_access_token', 'user_access_time', 'user_refresh_token', 'user_refresh_time']}),
     ]
     list_display = ('at_theme', 'at_date', 'at_zhu_jiang_ren',
-                    'at_sign_up_deadline', 'at_counts', 'user_list')
+                    'at_sign_up_deadline', 'at_counts')
 
 
 admin.site.register(AbilityTraining, AbilityTrainingAdmin)
+
+
+admin.site.unregister(Group)

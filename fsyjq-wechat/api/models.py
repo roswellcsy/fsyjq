@@ -31,10 +31,6 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser):
     username = models.CharField(
         max_length=255, unique=True, verbose_name='用户名')
-    email = models.EmailField(max_length=255, blank=True, null=True)
-    cellphone = models.CharField(
-        max_length=11, verbose_name='手机号', blank=True, null=True)
-    volunteer_or_not = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
     objects = UserManager()
@@ -42,7 +38,7 @@ class User(AbstractBaseUser):
     USERNAME_FIELD = 'username'
 
     class Meta:
-        verbose_name_plural = '用户信息'
+        verbose_name_plural = '账户管理'
 
     def is_staff(self):
         return self.is_admin
@@ -64,6 +60,34 @@ class User(AbstractBaseUser):
         # The user is identified by their email address
         return self.username
 
+# 用户基本信息
+class UserInformation(models.Model):
+    class Meta:
+        verbose_name_plural = '用户基本信息'
+
+    def __str__(self):
+        return '用户基本信息'
+    # 与账号一一对应关系
+    user_information_user = models.OneToOneField(
+        User, null=True, blank=True, verbose_name='用户')
+    # 用户姓名
+    user_information_name = models.CharField(max_length=50, null=True, blank=True, verbose_name='姓名')
+    # 用户性别
+    # '1'代表男，'2'代表女
+    sex = (
+        ('1', '男'),
+        ('2', '女'),
+    )
+    user_information_sex = models.CharField(
+        max_length=1, default=1, choices=sex, verbose_name='性别')
+    # 用户联系电话
+    user_information_cellphone = models.CharField(
+        max_length=11, verbose_name='手机号', blank=True, null=True)
+    # 用户电邮
+    user_information_email = models.EmailField(max_length=255, blank=True, null=True, verbose_name='电邮')
+    # 用户是否志愿者
+    user_information_volunteer = models.BooleanField(default=False, verbose_name='志愿者')
+
 
 # 单图片上传，提供公益活动使用
 class SingleUploadImg(models.Model):
@@ -75,7 +99,7 @@ class SingleUploadImg(models.Model):
     campaign_or_service_name = models.CharField(
         max_length=50, verbose_name='活动名称')
     photo_name = models.CharField(max_length=10, verbose_name='照片名字')
-    photo = models.ImageField('图片', upload_to='')
+    photo_path = models.ImageField('图片', upload_to='media')
 
 
 # # 政策文章
@@ -221,7 +245,7 @@ class ProfessionalAdvice(models.Model):
         max_length=50, blank=True, verbose_name='所在社区')
     # (14)联系方式
     proadv_contact = models.CharField(
-        max_length=11, blank=True, verbose_name='联系方式(手机)')
+        max_length=11, verbose_name='联系方式(手机)')
     # (15)家庭住址
     proadv_live_address = models.CharField(
         max_length=50, blank=True, verbose_name='家庭住址')
@@ -323,29 +347,8 @@ class ProfessionalAdvice(models.Model):
             return '待跟进'
 
 
-# 活动报名人
-class CampaignPerson(models.Model):
-    class Meta:
-        verbose_name_plural = '公益活动报名人'
+# 用户基本信息
 
-    def __str__(self):
-        return self.campaign_person_name
-    # 报名人姓名
-    campaign_person_name = models.CharField(max_length=50, verbose_name='姓名')
-    # 报名人性别
-    # '1'代表男，'2'代表女
-    sex = (
-        ('男', '男'),
-        ('女', '女'),
-    )
-    campaign_person_sex = models.CharField(
-        max_length=1, choices=sex, verbose_name='性别')
-    # 报名人联系电话
-    campaign_person_cellphone = models.CharField(
-        max_length=11, verbose_name='手机号', blank=True, null=True)
-    # 与用户一一对应关系
-    campaign_person_user = models.ForeignKey(
-        User, null=True, blank=True, related_name='campaignperson', verbose_name='用户')
 
 
 class VolunteerInformation(models.Model):
@@ -353,21 +356,23 @@ class VolunteerInformation(models.Model):
         verbose_name_plural = '志愿者信息'
 
     def __str__(self):
-        return self.volinfo_name
+        return '志愿者信息'
     # 志愿者信息
-    volinfo_user = models.ForeignKey(User, null=True, blank=True, verbose_name='平台用户')
+    volinfo_user = models.OneToOneField(User, null=True, blank=True, verbose_name='平台用户')
     #(1)姓名
-    volinfo_name = models.CharField(max_length=20, verbose_name='姓名')
+    # volinfo_name = models.CharField(max_length=20, verbose_name='姓名')
+    # volinfo_name = volinfo_user.user_information_name
     # def volinfo_name(self):
     #     return self.volinfo_user.name
     # volinfo_name.short_description = '姓名'
     #(2)性别 值为1时是男性，值为2时是女性，值为0时是未知
-    SEX = (
-        ('1', '男'),
-        ('2', '女'),
-    )
-    volinfo_sex = models.CharField(
-        max_length=1, choices=SEX, verbose_name='性别')
+    # SEX = (
+    #     ('1', '男'),
+    #     ('2', '女'),
+    # )
+    # volinfo_sex = models.CharField(
+    #     max_length=1, choices=SEX, verbose_name='性别')
+    # volinfo_sex = UserInformation.user_information_sex
 
     # def volinfo_sex(self):
     #     if self.volinfo_user.user_sex == '1':
@@ -409,8 +414,8 @@ class VolunteerInformation(models.Model):
     volinfo_birthday = models.DateField(
         blank=True, null=True, verbose_name='出生日期')
     #(9)Email
-    volinfo_email = models.CharField(
-        max_length=50, blank=True, verbose_name='电子邮箱')
+    # volinfo_email = models.CharField(
+    #     max_length=50, blank=True, verbose_name='电子邮箱')
     #(10)毕业院校
     volinfo_graduate_school = models.CharField(
         max_length=50, blank=True, verbose_name='毕业院校')
@@ -439,7 +444,8 @@ class VolunteerInformation(models.Model):
     volinfo_contact_number = models.CharField(
         max_length=50, blank=True, verbose_name='固定电话')
     #(19)移动电话
-    volinfo_cellphone = models.CharField(max_length=11, verbose_name='移动电话')
+    # volinfo_cellphone = models.CharField(max_length=11, verbose_name='移动电话')
+    volinfo_cellphone = UserInformation.user_information_cellphone
     # def volinfo_cell_number(self):
     #     return self.volinfo_user.cellphone
     # volinfo_cell_number.short_description = '移动电话'
@@ -457,7 +463,8 @@ class VolunteerInformation(models.Model):
     #(22)技能
     volinfo_skills = models.CharField(
         max_length=50, blank=True, verbose_name='技能')
-
+    # 累计志愿服务时数
+    volinfo_service_time = models.PositiveIntegerField(default=0, verbose_name='志愿活动认证时数')
 
 # 公益活动信息，需要后台上传图片
 class Campaign(models.Model):
@@ -484,7 +491,7 @@ class Campaign(models.Model):
     # 活动地点
     campaign_address = models.CharField(max_length=50, verbose_name='活动地点')
     # 活动内容
-    campaign_content = models.CharField(max_length=255, verbose_name='活动内容')
+    campaign_content = models.TextField(verbose_name='活动内容')
     # 服务费用
     campaign_paid = models.CharField(max_length=50, verbose_name='服务费用')
     # 活动图片
@@ -494,10 +501,15 @@ class Campaign(models.Model):
     campaign_signup_deadline = models.DateTimeField('报名截止时间')
     # 联系方式
     campaign_contact = models.CharField(max_length=50, verbose_name='活动联系方式')
+    # 活动认证时数
+    campaign_certified_hours = models.PositiveIntegerField(
+        default=0, verbose_name='志愿活动认证时数（小时）')
     # 可报名参与人数
-    campaign_counts = models.PositiveSmallIntegerField(verbose_name='可报名总人数')
+    campaign_counts = models.PositiveSmallIntegerField(default=0, verbose_name='可报名总人数')
     # 可报名志愿者人数
-    campaign_vol_counts = models.PositiveSmallIntegerField(verbose_name='可报名志愿者人数')
+    campaign_vol_counts = models.PositiveSmallIntegerField(default=0, verbose_name='可报名志愿者人数')
+    # 活动状态
+    campaign_status = models.BooleanField(default=True, verbose_name='活动状态')
     # 报名人员
     # signup_user_list = models.ManyToManyField(
     #     CampaignPerson, blank=True, verbose_name='报名人员名单')
@@ -505,10 +517,12 @@ class Campaign(models.Model):
     # def user_list(self):
     #     return ','.join(['姓名:' + i.campaign_person_name + ',性别:' + i.campaign_person_sex + ',联系方式:' + i.campaign_person_cellphone for i in self.signup_user_list.all()])
     # user_list.short_description = '报名人员名单'
-    campaign_person = models.ManyToManyField(
-        CampaignPerson, blank=True, verbose_name='报名人员名单')
-    campaign_volunteer = models.ManyToManyField(
-        VolunteerInformation, blank=True, verbose_name='报名志愿者名单')
+    campaign_members = models.ManyToManyField(
+        User, blank=True, related_name='campaign_members', verbose_name='报名人员名单')
+    campaign_volunteers = models.ManyToManyField(
+        User, blank=True, related_name='campaign_volunteers', verbose_name='报名志愿者名单')
+    
+
 
 # 志愿者登记,用Profile,onetoonefiled来新增
 
@@ -526,18 +540,20 @@ class AbilityTraining(models.Model):
     # 培训时间
     at_date = models.DateTimeField('培训时间')
     # 培训内容
-    at_content = models.CharField(max_length=100, verbose_name='培训内容')
+    at_content = models.TextField(verbose_name='培训内容')
     # 培训地址
     at_address = models.CharField(max_length=100, verbose_name='培训地址')
     # 可报名人数
-    at_counts = models.PositiveSmallIntegerField(verbose_name='可报名人数')
+    at_counts = models.PositiveSmallIntegerField(default=0, verbose_name='可报名总人数')
+    # 剩余可报名人数
+    at_remain = models.PositiveSmallIntegerField(default=0, verbose_name='剩余可报名人数')
     # 培训报名截止日期
     at_sign_up_deadline = models.DateField('服务报名截止时间')
     # pass
     # 报名人员
-    signup_user_list = models.ManyToManyField(
-        VolunteerInformation, blank=True, verbose_name='报名志愿者名单')
+    volunteers = models.ManyToManyField(
+        User, blank=True, verbose_name='报名志愿者名单')
 
-    def user_list(self):
-        return ','.join(['姓名:' + i.volinfo_name + ',性别:' + i.volinfo_sex + ',联系方式:' + i.volinfo_cellphone for i in self.signup_user_list.all()])
-    user_list.short_description = '报名志愿者名单'
+    # def user_list(self):
+    #     return ','.join(['姓名:' + i.volinfo_name + ',性别:' + i.volinfo_sex + ',联系方式:' + i.volinfo_cellphone for i in self.volunteers.all()])
+    # user_list.short_description = '报名志愿者名单'

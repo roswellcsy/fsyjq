@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from rest_framework import serializers
-from .models import User, Campaign, PolicyQA, ProfessionalAdvice, CampaignPerson, VolunteerInformation, AbilityTraining
+from .models import User, Campaign, PolicyQA, ProfessionalAdvice, VolunteerInformation, AbilityTraining, SingleUploadImg, UserInformation, VolunteerInformation 
 import datetime
 
 # 多对多需要嵌套，下方是例子
@@ -48,7 +48,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'cellphone','email', 'last_login', 'is_admin', 'password')
+        fields = ('id', 'username', 'last_login', 'is_admin', 'password')
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
@@ -63,14 +63,67 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
 
-class CampaignSerializer(serializers.ModelSerializer):
+class UserInformationSerializer(serializers.ModelSerializer):
+
+    # person = serializers.SlugRelatedField(
+    #     slug_field=User.USERNAME_FIELD, queryset=User.objects.all())
+    user_information_user = UserSerializer(required=True)
+
+    class Meta:
+        model = UserInformation
+        fields = (
+            'id',
+            'user_information_user',
+            'user_information_name',
+            'user_information_sex',
+            'user_information_cellphone',
+            'user_information_email',
+            'user_information_volunteer'
+            )
+
+class CampaignPhotosSerializer(serializers.ModelSerializer):
 
     # person = serializers.SlugRelatedField(
     #     slug_field=User.USERNAME_FIELD, queryset=User.objects.all())
 
     class Meta:
+        model = SingleUploadImg
+        fields = (
+            'id',
+            'campaign_or_service_name',
+            'photo_name',
+            'photo_path',
+            )
+
+
+class CampaignPublishedSerializer(serializers.ModelSerializer):
+
+    # person = serializers.SlugRelatedField(
+    #     slug_field=User.USERNAME_FIELD, queryset=User.objects.all())
+    photos = CampaignPhotosSerializer(many=True)
+    campaign_members = UserSerializer(many=True)
+    campaign_volunteers = UserSerializer(many=True)
+
+    class Meta:
         model = Campaign
-        fields = ('campaign_name', 'campaign_type', 'campaign_date')
+        fields = (
+            'campaign_name',
+            'campaign_type',
+            'campaign_date',
+            'campaign_date',
+            'campaign_client',
+            'campaign_address',
+            'campaign_content',
+            'campaign_paid',
+            'campaign_signup_deadline',
+            'campaign_contact',
+            'campaign_certified_hours',
+            'campaign_counts',
+            'campaign_vol_counts',
+            'photos',
+            'campaign_members',
+            'campaign_volunteers'
+            )
 
 # 专业咨询
 class ProfessionalAdviceSerializer(serializers.ModelSerializer):
@@ -100,7 +153,7 @@ class ProfessionalAdviceSerializer(serializers.ModelSerializer):
             'proadv_contact',
             'proadv_live_address',
             'proadv_marriage',
-            'proadv_user'
+            'proadv_user',
         )
         # extra_kwargs = {'password': {'write_only': True}}
 # 政策咨询
@@ -134,14 +187,16 @@ class PolicyQASerializer(serializers.ModelSerializer):
 class VolunteerInformationSerializer(serializers.ModelSerializer):
 
     # slug_field是以外键的某个值作为关联
-    volinfo_user = serializers.SlugRelatedField(
-        slug_field=User.USERNAME_FIELD, queryset=User.objects.all())
+    # volinfo_user = serializers.SlugRelatedField(
+    #     slug_field=User.USERNAME_FIELD, queryset=User.objects.all())
+    volinfo_user = UserSerializer(required=True)
+
     class Meta:
         model = VolunteerInformation
         fields = (
             'id',
-            'volinfo_name',
-            'volinfo_sex',
+            # 'volinfo_name',
+            # 'volinfo_sex',
             'volinfo_age',
             'volinfo_jiguan',
             'volinfo_live_address',
@@ -149,7 +204,7 @@ class VolunteerInformationSerializer(serializers.ModelSerializer):
             'volinfo_idcard_type',
             'volinfo_id_num',
             'volinfo_birthday',
-            'volinfo_email',
+            # 'volinfo_email',
             'volinfo_graduate_school',
             'volinfo_graduate_date',
             'volinfo_education',
@@ -159,25 +214,45 @@ class VolunteerInformationSerializer(serializers.ModelSerializer):
             'volinfo_mail_address',
             'volinfo_zipcode',
             'volinfo_contact_number',
-            'volinfo_cellphone',
+            # 'volinfo_cellphone',
             'volinfo_service_area',
             'volinfo_service_date',
             'volinfo_skills',
+            'volinfo_service_time',
             'volinfo_user'
         )
 
 # 活动报名人信息
-class CampaignPersonSerializer(serializers.ModelSerializer):
+# class CampaignPersonSerializer(serializers.ModelSerializer):
+
+#     # slug_field是以外键的某个值作为关联
+#     campaign_person_user = serializers.SlugRelatedField(
+#         slug_field=User.USERNAME_FIELD, queryset=User.objects.all())
+#     class Meta:
+#         model = CampaignPerson
+#         fields = (
+#             'id',
+#             'campaign_person_name',
+#             'campaign_person_sex',
+#             'campaign_person_cellphone',
+#             'campaign_person_user'
+#         )
+
+class AbilityTrainingSerializer(serializers.ModelSerializer):
 
     # slug_field是以外键的某个值作为关联
-    campaign_person_user = serializers.SlugRelatedField(
-        slug_field=User.USERNAME_FIELD, queryset=User.objects.all())
+    signup_user_list = VolunteerInformationSerializer(
+        many=True)
     class Meta:
-        model = CampaignPerson
+        model = AbilityTraining
         fields = (
             'id',
-            'campaign_person_name',
-            'campaign_person_sex',
-            'campaign_person_cellphone',
-            'campaign_person_user'
+            'at_zhu_jiang_ren',
+            'at_theme',
+            'at_date',
+            'at_content',
+            'at_address',
+            'at_counts',
+            'at_sign_up_deadline',
+            'signup_user_list'
         )

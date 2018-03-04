@@ -2,11 +2,13 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import FastClick from 'fastclick'
+// import zh_CN from 'vee-validate/dist/locale/zh_CN'
 import VeeValidate from 'vee-validate'
+
 // import VueRouter from 'vue-router'
 import App from './App'
 // import Home from './components/HelloFromVux'
-
+// Validator.addLocale(zh_CN)
 import {
   WechatPlugin,
   AjaxPlugin,
@@ -24,7 +26,9 @@ import '@/permission' // permission control
 /**
  * 加载插件
  */
-Vue.use(VeeValidate)
+Vue.use(
+  VeeValidate
+)
 Vue.use(Vuex)
 Vue.use(WechatPlugin)
 Vue.use(AjaxPlugin)

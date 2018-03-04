@@ -8,8 +8,6 @@
     <group>
       <x-input title="账号" v-model="RegisterForm.username" placeholder="必填"></x-input>
       <x-input title="密码" v-model="RegisterForm.password" placeholder="请注意保管"></x-input>
-      <x-input title="手机号" v-model="RegisterForm.cellphone" :max="11" placeholder="选填"></x-input>
-      <x-input title="邮箱" v-model="RegisterForm.email" placeholder="选填"></x-input>  
     </group>
 
     <group style="padding:5px 20px;">
@@ -41,9 +39,7 @@ export default {
     return {
       RegisterForm: {
         username: '',
-        password: '',
-        cellphone: '',
-        email: ''
+        password: ''
       }
     }
   },
@@ -70,9 +66,7 @@ export default {
     // }
       const username = this.RegisterForm.username
       const password = this.RegisterForm.password
-      const cellphone = this.RegisterForm.cellphone
-      const email = this.RegisterForm.email
-      register(username, password, cellphone, email).then(response => { // mockserver返回20000和包在data的token，实际后端只返回token
+      register(username, password).then(response => { // mockserver返回20000和包在data的token，实际后端只返回token
         this.$router.push({ path: '/login' })
       }).catch(error => {
         console.log(error)

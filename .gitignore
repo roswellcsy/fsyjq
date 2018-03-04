@@ -1,0 +1,14 @@
+/static/
+.inf
+
+
+### Django ###
+*.log
+*.pot
+*.pyc
+__pycache__/
+local_settings.py
+## setting ##
+settings.py
+
+remind.txt

@@ -22,13 +22,12 @@ export function getInfo(username, token) { // 拉取用户信息
     url: '/user/', // 获取admin信息，带用户名参数
     method: 'get',
     params: {
-      username,
-      token
+      username
     }
   })
 }
 
-export function register(username, password, cellphone, email) { // 注册
+export function register(username, password) { // 注册
   return request({
     // url: '/user/login', // 根据实际修改
     url: '/api-register/',
@@ -36,9 +35,7 @@ export function register(username, password, cellphone, email) { // 注册
     data: {
       // username,
       username,
-      password,
-      cellphone,
-      email
+      password
     }
   })
 }
