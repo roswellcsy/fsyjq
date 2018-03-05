@@ -32,22 +32,22 @@
 import { fetchCurrentcampaign } from '@/api/campaign'
 import { Swiper, Group, Cell, Datetime, XButton } from 'vux'
 
-// const imgList = [
-//   'http://placeholder.qiniudn.com/800x300/FF3B3B/ffffff',
-//   'http://placeholder.qiniudn.com/800x300/FFEF7D/ffffff',
-//   'http://placeholder.qiniudn.com/800x300/8AEEB1/ffffff',
-//   'http://localhost:8000/media/media/IMG_6061_6gUn15p.JPG'
-// ]
+const imgList = [
+  'http://placeholder.qiniudn.com/800x300/FF3B3B/ffffff',
+  'http://placeholder.qiniudn.com/800x300/FFEF7D/ffffff',
+  'http://placeholder.qiniudn.com/800x300/8AEEB1/ffffff',
+  'http://localhost:8000/media/media/IMG_6061_6gUn15p.JPG'
+]
 // const imgList = []
 
 // for (link in content[0].photos) {
 //   imgList.push(link.photo_path)
 // }
 // const demoList = []
-// const demoList = imgList.map((one, index) => ({
-//   url: 'javascript:',
-//   img: one
-// }))
+const demoList = imgList.map((one, index) => ({
+  url: 'javascript:',
+  img: one
+}))
 
 export default {
   name: 'campaignDetail',
@@ -55,8 +55,8 @@ export default {
   // const imgList : new Array(),
   data() {
     return {
-      imgList: this.imgList,
-      // demo03_list: demoList1,
+      // imgList: this.imgList,
+      demo03_list: demoList1,
       // demo_list: this.demoList1,
       content: this.content
     }
@@ -79,7 +79,7 @@ export default {
   // },
   created() {
     this.fetchData()
-    this.fetchImagelist()
+    // this.fetchImagelist()
   },
   methods: {
     fetchData() {
@@ -90,18 +90,18 @@ export default {
         // this.fetchSuccess = false
         console.log(err)
       })
-    },
-    fetchImagelist() {
-      const imgList = []
-      for (this.img in this.content[0].photos) {
-        imgList.push(this.img)
-      }
-      // const demoList1 = imgList.map((one, index) => ({
-      //   url: 'javascript:',
-      //   img: one
-      // }))
-      return imgList
     }
+    // fetchImagelist() {
+    //   const imgList = []
+    //   for (this.img in this.content[0].photos) {
+    //     imgList.push(this.img)
+    //   }
+    //   // const demoList1 = imgList.map((one, index) => ({
+    //   //   url: 'javascript:',
+    //   //   img: one
+    //   // }))
+    //   return imgList
+    // }
   }
 }
 </script>

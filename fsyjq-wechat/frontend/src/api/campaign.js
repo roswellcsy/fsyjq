@@ -6,7 +6,7 @@ import request from '@/utils/request'
 
 export function fetchPublishedlist() {
   return request({
-    url: '/campaign/published',
+    url: '/campaign/published/',
     method: 'get'
   //   params: query
   })
@@ -14,7 +14,7 @@ export function fetchPublishedlist() {
 
 export function fetchMylist(username) {
   return request({
-    url: '/campaign/published',
+    url: '/campaign/published/',
     method: 'get',
     params: {
       username
@@ -24,7 +24,7 @@ export function fetchMylist(username) {
 
 export function fetchCurrentcampaign(campaign_name) {
   return request({
-    url: '/campaign/published',
+    url: '/campaign/published/',
     method: 'get',
     params: {
       campaign_name

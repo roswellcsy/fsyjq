@@ -9,7 +9,7 @@ from rest_framework import mixins, generics
 class CampaignPublishedViewSet(viewsets.ModelViewSet):
     # queryset = Campaign.objects.all()
     serializer_class = CampaignPublishedSerializer
-    permission_classes = (permissions.IsAuthenticated, )
+    permission_classes = (permissions.AllowAny, )
 
 # class CampaignPersonViewSet(viewsets.ModelViewSet):
 #     # queryset = PolicyQA.objects.all()

@@ -26,7 +26,7 @@ SECRET_KEY = 'gri)@qh)93@qlme_1oi*pr$i14fn*c9!3^^6p13+p*=kg)pocg'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'fsyjq.roswellcsy.com', 'fsyjq-admin.roswellcsy.com']
 
 
 # Application definition
@@ -91,19 +91,25 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
+        # 开发环境
         'NAME': 'fsyjq-dev',
+        # 生产环境
+        # 'NAME': 'fsyjq',
         'OPTIONS': {
             'charset': 'utf8mb4',
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
         },
-        # 'USER': 'fsyjq',
-        # 'USER': 'fsyjq',
+
+        # 开发环境
         'USER': 'root',
-        # 'PASSWORD': 'Gdkyit2018%',
         'PASSWORD': 'P@ssw0rd',
-        # 'HOST': 'rm-wz9ec4kz5ildi1t96o.mysql.rds.aliyuncs.com',
         'HOST': 'localhost',
         'PORT': '3306',
+        # 正式环境
+        # 'USER': 'fsyjq',
+        # 'PASSWORD': 'Gdkyit2018%',
+        # 'HOST': 'rm-wz9ec4kz5ildi1t96o.mysql.rds.aliyuncs.com',
+        # 'PORT': '3306',
     }
 }
 
