@@ -22,7 +22,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 router = DefaultRouter()
-router.register(r'campaign', api_views.CampaignPublishedViewSet, 'publishedCampaign')
+router.register(r'campaign/published', api_views.CampaignPublishedViewSet, 'publishedCampaign')
 router.register(r'userinformation', api_views.UserInformationViewSet, 'userinformation')
 router.register(r'policyqa', api_views.PolicyQAViewSet, 'policyqa')
 router.register(r'professonaladvice', api_views.ProfessionalAdviceViewSet, 'professonaladvice')
@@ -38,4 +38,5 @@ urlpatterns = [
     url(r'^api-register/', api_views.CreateUserView.as_view()),
     url(r'^token-api-auth/login/', obtain_jwt_token),
     url(r'^api-auth', include('rest_framework.urls')),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
+#  + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
