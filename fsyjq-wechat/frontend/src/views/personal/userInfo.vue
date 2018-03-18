@@ -43,12 +43,12 @@
           <cell title="是否志愿者" value=""></cell>
         </group>
       </template>
-      <template v-if="content.id === null">
+      <template v-if="content === null">
         <group style="padding:5px 20px;">
           <x-button type="primary" action-type="button" link="/personal/userInfocreate">添加个人信息</x-button>
         </group>
       </template>
-      <template v-else-if="content.id !== null">
+      <template v-else-if="content !== null">
         <group style="padding:5px 20px;">
           <x-button type="primary" action-type="button" link="/personal/userInfomodify">修改个人信息</x-button>
         </group>
