@@ -14,7 +14,7 @@ export function fetchPublishedlist() {
 
 export function fetchMylist(username) {
   return request({
-    url: '/campaign/published/',
+    url: '/participate/campaign/',
     method: 'get',
     params: {
       username
@@ -28,6 +28,16 @@ export function fetchCurrentcampaign(campaign_name) {
     method: 'get',
     params: {
       campaign_name
+    }
+  })
+}
+
+export function campaignSignup(campaign_id, user_id) {
+  return request({
+    url: '/campaign/signup/' + campaign_id + '/',
+    method: 'put',
+    data: {
+      'campaign_members_ids': [user_id]
     }
   })
 }

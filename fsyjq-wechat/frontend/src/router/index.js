@@ -76,31 +76,79 @@ export const constantRouterMap = [
         path: 'personal/userInfo',
         name: 'userInfo',
         component: _import('personal/userInfo'),
-        meta: { title: '主页' }
+        meta: { title: 'gerenxinxi' }
+      },
+      {
+        path: 'personal/userInfomodify',
+        name: 'userInfomodify',
+        component: _import('personal/userInfomodify'),
+        meta: { title: '修改个人信息' }
+      },
+      {
+        path: 'personal/userInfocreate',
+        name: 'userInfocreate',
+        component: _import('personal/userInfocreate'),
+        meta: { title: '添加个人信息' }
+      },
+      {
+        path: 'personal/userPolicyQAlist',
+        name: 'userPolicyQAlist',
+        component: _import('personal/policyqa/userPolicyQAlist'),
+        meta: { title: '我的政策咨询列表' }
       },
       {
         path: 'personal/userPolicyQA',
         name: 'userPolicyQA',
-        component: _import('personal/userPolicyQA'),
+        component: _import('personal/policyqa/userPolicyQA'),
         meta: { title: '我的政策咨询' }
+      },
+      {
+        path: 'personal/userProAdvlist',
+        name: 'userProAdv',
+        component: _import('personal/proadv/userProAdvlist'),
+        meta: { title: '我的专业咨询列表' }
       },
       {
         path: 'personal/userProAdv',
         name: 'userProAdv',
-        component: _import('personal/userProAdv'),
+        component: _import('personal/proadv/userProAdv'),
         meta: { title: '我的专业咨询' }
+      },
+      {
+        path: 'personal/userCampaignlist',
+        name: 'userCampaignlist',
+        component: _import('personal/campaign/userCampaignlist'),
+        meta: { title: '我的公益活动清单' }
       },
       {
         path: 'personal/userCampaign',
         name: 'userCampaign',
-        component: _import('personal/userCampaign'),
+        component: _import('personal/campaign/userCampaign'),
         meta: { title: '我的公益活动' }
+      },
+      {
+        path: 'personal/userVolServlist',
+        name: 'userVolServlist',
+        component: _import('personal/volserv/userVolservlist'),
+        meta: { title: '我的志愿服务清单' }
       },
       {
         path: 'personal/userVolServ',
         name: 'userVolServ',
-        component: _import('personal/userVolServ'),
-        meta: { title: '我的公益活动' }
+        component: _import('personal/volserv/userVolServ'),
+        meta: { title: '我的志愿服务' }
+      },
+      {
+        path: 'personal/userTraininglist',
+        name: 'userTraininglist',
+        component: _import('personal/training/userTraininglist'),
+        meta: { title: '我的培训清单' }
+      },
+      {
+        path: 'personal/userTraining',
+        name: 'userTraining',
+        component: _import('personal/training/userTraining'),
+        meta: { title: '我的培训' }
       }
     ]
   },
@@ -202,13 +250,19 @@ export const constantRouterMap = [
         path: '/volServ/index',
         name: 'volServ',
         component: _import('charitycampaign/volServ/index'),
-        meta: { title: '志愿者' }
+        meta: { title: '志愿者功能清单' }
       },
       {
         path: '/volServ/register',
         name: 'register',
         component: _import('charitycampaign/volServ/register'),
         meta: { title: '志愿者登记' }
+      },
+      {
+        path: '/volServ/modify',
+        name: 'register',
+        component: _import('charitycampaign/volServ/modify'),
+        meta: { title: '志愿者信息修改' }
       },
       {
         path: '/volServ/traningList',

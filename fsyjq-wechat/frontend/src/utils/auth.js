@@ -32,3 +32,17 @@ export function removeUsername() {
   return window.localStorage.removeItem('username')
 }
 
+export function setSex(user_information_sex) {
+  // return Cookies.set(TokenKey, token)
+  return window.localStorage.setItem('sex', user_information_sex)
+}
+
+export function setCellphone(user_information_cellphone) {
+  // return Cookies.set(TokenKey, token)
+  return window.localStorage.setItem('cellphone', user_information_cellphone)
+}
+
+export function setEmail(user_information_email) {
+  // return Cookies.set(TokenKey, token)
+  return window.localStorage.setItem('email', user_information_email)
+}

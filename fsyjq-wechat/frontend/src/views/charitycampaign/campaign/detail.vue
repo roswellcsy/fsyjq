@@ -1,9 +1,9 @@
 <!--用于展示公益活动详细信息 -->
-<!-- 早上起床先解决这个页面 -->
+<!-- 需要动态从后台读取轮播图片，待处理 -->
 <template>
   <div id ='CampaignDetail'>
     <!-- <group-title>自动轮播</group-title> -->
-    <!-- <swiper :list=demo03_list auto style="width:100%;margin:0 auto;" height="180px" dots-class="custom-bottom" dots-position="center"></swiper> -->
+    <swiper :list=demo03_list auto style="width:100%;margin:0 auto;" height="180px" dots-class="custom-bottom" dots-position="center"></swiper>
     <group>
         <cell title='活动名称:' :value=content[0].campaign_name></cell>
         <cell title='活动分类:' :value=content[0].campaign_type></cell>
@@ -16,20 +16,23 @@
         <cell title='联系方式:' :value=content[0].campaign_contact></cell>
         <cell title='活动认证时数:' :value=content[0].campaign_certified_hours></cell>
         <cell title='可报名参与人数:' :value=content[0].campaign_counts></cell>
-        <cell title='可报名志愿者人数:' :value=content[0].campaign_vol_counts></cell>
-        
+        <cell title='可报名志愿者人数:' :value=content[0].campaign_vol_counts></cell> 
     </group>
     <group>
-      <template v-for="img in imgList">
-        <cell title='测试' :value=img></cell>
-      </template>
+      <span>活动后台ID：{{ content[0].id }}</span>
+    </group>
+    <group style="padding:5px 20px;">
+      <x-button type="primary" action-type="button" @click.native.prevent="handleSignup">报名</x-button>
+    </group>
+    <group>
+      <cell>活动报名</cell>
     </group>
 
   </div>
 </template>
 
 <script>
-import { fetchCurrentcampaign } from '@/api/campaign'
+import { fetchCurrentcampaign, campaignSignup } from '@/api/campaign'
 import { Swiper, Group, Cell, Datetime, XButton } from 'vux'
 
 const imgList = [
@@ -56,7 +59,7 @@ export default {
   data() {
     return {
       // imgList: this.imgList,
-      demo03_list: demoList1,
+      demo03_list: demoList,
       // demo_list: this.demoList1,
       content: this.content
     }
@@ -90,7 +93,7 @@ export default {
         // this.fetchSuccess = false
         console.log(err)
       })
-    }
+    },
     // fetchImagelist() {
     //   const imgList = []
     //   for (this.img in this.content[0].photos) {
@@ -102,6 +105,15 @@ export default {
     //   // }))
     //   return imgList
     // }
+    handleSignup() {
+      console.log('点击报名')
+      campaignSignup(this.content[0].id, window.localStorage.getItem('user_id')).then(response => { // mockserver返回20000和包在data的token，实际后端只返回token
+        this.$router.push({ path: '/campaign/list' })
+      }).catch(error => {
+        console.log(error)
+        // reject(error)
+      })
+    }
   }
 }
 </script>

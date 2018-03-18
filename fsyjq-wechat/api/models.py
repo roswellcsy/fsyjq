@@ -69,7 +69,7 @@ class UserInformation(models.Model):
         return '用户基本信息'
     # 与账号一一对应关系
     user_information_user = models.OneToOneField(
-        User, null=True, blank=True, verbose_name='用户')
+        User, verbose_name='平台用户')
     # 用户姓名
     user_information_name = models.CharField(max_length=50, null=True, blank=True, verbose_name='姓名')
     # 用户性别
@@ -87,6 +87,7 @@ class UserInformation(models.Model):
     user_information_email = models.EmailField(max_length=255, blank=True, null=True, verbose_name='电邮')
     # 用户是否志愿者
     user_information_volunteer = models.BooleanField(default=False, verbose_name='志愿者')
+    user_information_update_time = models.DateTimeField(auto_now=True)
 
 
 # 单图片上传，提供公益活动使用
@@ -100,6 +101,7 @@ class SingleUploadImg(models.Model):
         max_length=50, verbose_name='活动名称')
     photo_name = models.CharField(max_length=10, verbose_name='照片名字')
     photo_path = models.ImageField('图片', upload_to='media')
+    upload_date = models.DateTimeField(auto_now=True)
 
 
 # # 政策文章
@@ -118,7 +120,7 @@ class PolicyQA(models.Model):
         ('1', '男'),
         ('2', '女'),
     )
-    qa_sex = models.CharField(max_length=1, choices=sex, verbose_name='性别')  # 1男2女
+    qa_sex = models.CharField(max_length=1, default=1, choices=sex, verbose_name='性别')  # 1男2女
 
     qa_age = models.PositiveIntegerField(
         verbose_name='年龄', null=True, blank=True)
@@ -152,7 +154,7 @@ class PolicyQA(models.Model):
         ('7', '综合类（多种问题）'),
     )
 
-    qa_type = models.CharField(max_length=1, choices=type_options, verbose_name='类型', null=True, blank=True)
+    qa_type = models.CharField(max_length=1, default=1, choices=type_options, verbose_name='类型')
 
     qa_content = models.TextField(verbose_name='提问内容')
 
@@ -161,7 +163,7 @@ class PolicyQA(models.Model):
         ('2', '线下'),
     )
 
-    qa_o2o = models.CharField(max_length=1, choices=o2o_type, verbose_name='线上线下回复')
+    qa_o2o = models.CharField(max_length=1, default=1, choices=o2o_type, verbose_name='线上线下回复')
     # 只在我的咨询显示
     qa_ask_date = models.DateTimeField(
         verbose_name='提问时间', auto_now_add=True)
@@ -192,7 +194,7 @@ class ProfessionalAdvice(models.Model):
         max_length=255, verbose_name='咨询问题')
     proadv_question_content = models.TextField(
         verbose_name='咨询内容')
-
+    proadv_update_time = models.DateTimeField(auto_now=True)
     # 对象基本信息
     proadv_full_name = models.CharField(
         max_length=10, verbose_name='姓名')
@@ -202,7 +204,7 @@ class ProfessionalAdvice(models.Model):
         ('2', '女'),
     )
     proadv_sex = models.CharField(
-        max_length=1, choices=sex, verbose_name='性别')
+        max_length=1, default=1, choices=sex, verbose_name='性别')
     proadv_age = models.PositiveIntegerField(
         null=True, blank=True, verbose_name='年龄')
     proadv_house_hold = models.CharField(
@@ -296,7 +298,7 @@ class ProfessionalAdvice(models.Model):
         ('14', '其它'),
     )
     proadv_question_type = models.CharField(
-        max_length=50, choices=question_type, blank=True, verbose_name='咨询问题类型')
+        max_length=50, default=14, choices=question_type, blank=True, verbose_name='咨询问题类型')
 
     social_rescue = (
         ('1', '医疗救助'),
@@ -358,7 +360,7 @@ class VolunteerInformation(models.Model):
     def __str__(self):
         return '志愿者信息'
     # 志愿者信息
-    volinfo_user = models.OneToOneField(User, null=True, blank=True, verbose_name='平台用户')
+    volinfo_user = models.OneToOneField(User, verbose_name='平台用户')
     #(1)姓名
     # volinfo_name = models.CharField(max_length=20, verbose_name='姓名')
     # volinfo_name = volinfo_user.user_information_name
@@ -380,8 +382,8 @@ class VolunteerInformation(models.Model):
     #     elif self.volinfo_user.user_sex == '2':
     #         return '女'
     # volinfo_sex.short_description = '性别'
-    volinfo_age = models.PositiveIntegerField(
-        null=True, blank=True, verbose_name='年龄')
+    # volinfo_age = models.PositiveIntegerField(
+    #     null=True, blank=True, verbose_name='年龄')
 
     #(3)籍贯
     volinfo_jiguan = models.CharField(
@@ -397,7 +399,7 @@ class VolunteerInformation(models.Model):
         ('4', '丧偶'),
     )
     volinfo_marriage = models.CharField(
-        max_length=1, choices=marriage_status, blank=True, verbose_name='婚姻状况')
+        max_length=1, choices=marriage_status, default='1', blank=True, verbose_name='婚姻状况')
     #(6)证件类型(身份证、护照、警官证、军官证)
     id_card_type = (
         ('1', '身份证'),
@@ -445,7 +447,7 @@ class VolunteerInformation(models.Model):
         max_length=50, blank=True, verbose_name='固定电话')
     #(19)移动电话
     # volinfo_cellphone = models.CharField(max_length=11, verbose_name='移动电话')
-    volinfo_cellphone = UserInformation.user_information_cellphone
+    # volinfo_cellphone = UserInformation.user_information_cellphone
     # def volinfo_cell_number(self):
     #     return self.volinfo_user.cellphone
     # volinfo_cell_number.short_description = '移动电话'
@@ -459,12 +461,13 @@ class VolunteerInformation(models.Model):
         ('3', '不限'),
     )
     volinfo_service_date = models.CharField(
-        max_length=50, choices=service_date_options, verbose_name='志愿服务时间')
+        max_length=50, choices=service_date_options, default='1', blank=True, verbose_name='志愿服务时间')
     #(22)技能
     volinfo_skills = models.CharField(
         max_length=50, blank=True, verbose_name='技能')
     # 累计志愿服务时数
     volinfo_service_time = models.PositiveIntegerField(default=0, verbose_name='志愿活动认证时数')
+    volinfo_update_time = models.DateTimeField(auto_now=True)
 
 # 公益活动信息，需要后台上传图片
 class Campaign(models.Model):
@@ -510,6 +513,7 @@ class Campaign(models.Model):
     campaign_vol_counts = models.PositiveSmallIntegerField(default=0, verbose_name='可报名志愿者人数')
     # 活动状态
     campaign_status = models.BooleanField(default=True, verbose_name='活动状态')
+    campaign_update_time = models.DateTimeField(auto_now=True)
     # 报名人员
     # signup_user_list = models.ManyToManyField(
     #     CampaignPerson, blank=True, verbose_name='报名人员名单')
@@ -549,6 +553,7 @@ class AbilityTraining(models.Model):
     at_remain = models.PositiveSmallIntegerField(default=0, verbose_name='剩余可报名人数')
     # 培训报名截止日期
     at_sign_up_deadline = models.DateField('服务报名截止时间')
+    at_update_time = models.DateTimeField(auto_now=True)
     # pass
     # 报名人员
     volunteers = models.ManyToManyField(

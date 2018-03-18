@@ -46,7 +46,7 @@ router.beforeEach((to, from, next) => {
     if (to.path === '/login') { // 有token，判断是否前往登录界面
       next({ path: '/' }) // 因为有token，即认证过，前往登录界面则直接转至/dashboard
     } else {
-      if (store.getters.username.length !== 0) {
+      if (store.getters.user_id.length === 0) {
         // 只有在login阶段才会获取到username，
         // 然后才是根据getinfo拉到对应username的信息，
         // 否则重新登录，避免刷新丢失state的username
@@ -58,6 +58,12 @@ router.beforeEach((to, from, next) => {
             console.log('验证失败,请重新登录')
             next({ path: '/login' })
           })
+        })
+        store.dispatch('GetDetailInfo').then(res => { // 拉取用户信息
+          next()
+        })
+        store.dispatch('GetVolInfo').then(res => { // 拉取用户信息
+          next()
         })
       } else {
         next()

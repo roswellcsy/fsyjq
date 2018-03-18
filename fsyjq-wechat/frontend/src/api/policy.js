@@ -40,13 +40,22 @@ export function commitPolicyqaform(
   })
 }
 
-export function getMyPolicyQA(username, token) { // 拉取用户信息
+export function getMyPolicyQAlist(username) { // 拉取用户信息
   return request({
     url: '/policyqa/', // 获取admin信息，带用户名参数
     method: 'get',
     params: {
-      username,
-      token
+      username
+    }
+  })
+}
+
+export function getMyPolicyQA(qa_title) { // 拉取用户信息
+  return request({
+    url: '/policyqa/', // 获取admin信息，带用户名参数
+    method: 'get',
+    params: {
+      qa_title
     }
   })
 }

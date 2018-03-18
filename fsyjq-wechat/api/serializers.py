@@ -48,7 +48,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'last_login', 'is_admin', 'password')
+        fields = ('id', 'username', 'password')
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
@@ -67,12 +67,14 @@ class UserInformationSerializer(serializers.ModelSerializer):
 
     # person = serializers.SlugRelatedField(
     #     slug_field=User.USERNAME_FIELD, queryset=User.objects.all())
-    user_information_user = UserSerializer(required=True)
+    user_information_user = UserSerializer(read_only=True)
+    user_information_user_id = serializers.PrimaryKeyRelatedField(read_only=False, queryset=User.objects.all(), source='user_information_user')
 
     class Meta:
         model = UserInformation
         fields = (
             'id',
+            'user_information_user_id',
             'user_information_user',
             'user_information_name',
             'user_information_sex',
@@ -80,6 +82,47 @@ class UserInformationSerializer(serializers.ModelSerializer):
             'user_information_email',
             'user_information_volunteer'
             )
+
+# 志愿者信息
+class VolunteerInformationSerializer(serializers.ModelSerializer):
+
+    # slug_field是以外键的某个值作为关联
+    # volinfo_user = serializers.SlugRelatedField(
+    #     slug_field=User.USERNAME_FIELD, queryset=User.objects.all())
+    volinfo_user = UserSerializer(read_only=True)
+    volinfo_user_id = serializers.PrimaryKeyRelatedField(read_only=False, queryset=User.objects.all(), source='volinfo_user')
+
+    class Meta:
+        model = VolunteerInformation
+        fields = (
+            'id',
+            # 'volinfo_name',
+            # 'volinfo_sex',
+            # 'volinfo_age',
+            'volinfo_jiguan',
+            'volinfo_live_address',
+            'volinfo_marriage',
+            'volinfo_idcard_type',
+            'volinfo_id_num',
+            'volinfo_birthday',
+            # 'volinfo_email',
+            'volinfo_graduate_school',
+            'volinfo_graduate_date',
+            'volinfo_education',
+            'volinfo_profession',
+            'volinfo_employer',
+            'volinfo_position',
+            'volinfo_mail_address',
+            'volinfo_zipcode',
+            'volinfo_contact_number',
+            # 'volinfo_cellphone',
+            'volinfo_service_area',
+            'volinfo_service_date',
+            'volinfo_skills',
+            'volinfo_service_time',
+            'volinfo_user',
+            'volinfo_user_id'
+        )
 
 class CampaignPhotosSerializer(serializers.ModelSerializer):
 
@@ -95,13 +138,132 @@ class CampaignPhotosSerializer(serializers.ModelSerializer):
             'photo_path',
             )
 
-
+# 公开公益活动清单
 class CampaignPublishedSerializer(serializers.ModelSerializer):
+
+    # person = serializers.SlugRelatedField(
+    #     slug_field=User.USERNAME_FIELD, queryset=User.objects.all())
+    photos = CampaignPhotosSerializer(many=True, read_only=True)
+    campaign_members = UserSerializer(many=True, read_only=True)
+    campaign_volunteers = UserSerializer(many=True, read_only=True)
+    # campaign_members_ids = serializers.PrimaryKeyRelatedField(many=True, read_only=False, queryset=User.objects.all(), source='campaign_members')
+    # campaign_volunteers_ids = serializers.PrimaryKeyRelatedField(many=True, read_only=False, queryset=User.objects.all(), source='campaign_volunteers')
+
+    class Meta:
+        model = Campaign
+        fields = (
+            'id',
+            'campaign_name',
+            'campaign_type',
+            'campaign_date',
+            'campaign_date',
+            'campaign_client',
+            'campaign_address',
+            'campaign_content',
+            'campaign_paid',
+            'campaign_signup_deadline',
+            'campaign_contact',
+            'campaign_certified_hours',
+            'campaign_counts',
+            'campaign_vol_counts',
+            'photos',
+            'campaign_members',
+            'campaign_volunteers'
+            )
+        read_only_fields = (
+            'id',
+            'campaign_name',
+            'campaign_type',
+            'campaign_date',
+            'campaign_date',
+            'campaign_client',
+            'campaign_address',
+            'campaign_content',
+            'campaign_paid',
+            'campaign_signup_deadline',
+            'campaign_contact',
+            'campaign_certified_hours',
+            'campaign_counts',
+            'campaign_vol_counts',
+            'photos',
+            'campaign_members',
+            'campaign_volunteers'
+        )
+    
+    # def update(self, instance, validated_data):
+
+    #     # ...
+    #     validated_data['campaign_members'] = filter(None, validated_data['campaign_members'])
+    #     for campaign_member in validated_data['campaign_members']:
+    #         # user = User.objects.get(pk=campaign_members_id)
+    #         instance.campaign_members.add(campaign_member)
+    #     validated_data['campaign_volunteers'] = filter(None, validated_data['campaign_volunteers'])
+    #     for campaign_volunteer in validated_data['campaign_volunteers']:
+    #         # user = User.objects.get(pk=campaign_members_id)
+    #         instance.campaign_volunteers.add(campaign_volunteer)
+
+    #     return instance
+
+class CampaignSignUpSerializer(serializers.ModelSerializer):
+    campaign_members = UserSerializer(many=True, read_only=True)
+    campaign_members_ids = serializers.PrimaryKeyRelatedField(many=True, read_only=False, queryset=User.objects.all(), source='campaign_members')
+
+    class Meta:
+       model = Campaign
+       fields = (
+           'id',
+           'campaign_members',
+           'campaign_members_ids',
+           )
+       read_only_fields = (
+           'id',
+       )
+    
+    def update(self, instance, validated_data):
+
+        # ...
+        validated_data['campaign_members'] = filter(None, validated_data['campaign_members'])
+        for campaign_member in validated_data['campaign_members']:
+            # user = User.objects.get(pk=campaign_members_id)
+            instance.campaign_members.add(campaign_member)
+
+        return instance
+
+
+class VolServiceSignUpSerializer(serializers.ModelSerializer):
+    campaign_volunteers = UserSerializer(many=True, read_only=True)
+    campaign_volunteers_ids = serializers.PrimaryKeyRelatedField(many=True, read_only=False, queryset=User.objects.all(), source='campaign_volunteers')
+
+    class Meta:
+       model = Campaign
+       fields = (
+           'id',
+           'campaign_volunteers',
+           'campaign_volunteers_ids'
+           )
+       read_only_fields = (
+           'id',
+       )
+    
+    def update(self, instance, validated_data):
+
+        # ...
+        validated_data['campaign_volunteers'] = filter(None, validated_data['campaign_volunteers'])
+        for campaign_volunteer in validated_data['campaign_volunteers']:
+            # user = User.objects.get(pk=campaign_members_id)
+            instance.campaign_volunteers.add(campaign_volunteer)
+
+        return instance
+
+
+# 个人报名公益活动（志愿服务）清单
+class MyParticipateSerializer(serializers.ModelSerializer):
 
     # person = serializers.SlugRelatedField(
     #     slug_field=User.USERNAME_FIELD, queryset=User.objects.all())
     photos = CampaignPhotosSerializer(many=True)
     campaign_members = UserSerializer(many=True)
+    # campaign_members = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     campaign_volunteers = UserSerializer(many=True)
 
     class Meta:
@@ -154,6 +316,8 @@ class ProfessionalAdviceSerializer(serializers.ModelSerializer):
             'proadv_live_address',
             'proadv_marriage',
             'proadv_user',
+            'proadv_serv_date',
+            'proadv_serv_content'
         )
         # extra_kwargs = {'password': {'write_only': True}}
 # 政策咨询
@@ -183,44 +347,6 @@ class PolicyQASerializer(serializers.ModelSerializer):
             'qa_user'
         )
 
-# 志愿者信息
-class VolunteerInformationSerializer(serializers.ModelSerializer):
-
-    # slug_field是以外键的某个值作为关联
-    # volinfo_user = serializers.SlugRelatedField(
-    #     slug_field=User.USERNAME_FIELD, queryset=User.objects.all())
-    volinfo_user = UserSerializer(required=True)
-
-    class Meta:
-        model = VolunteerInformation
-        fields = (
-            'id',
-            # 'volinfo_name',
-            # 'volinfo_sex',
-            'volinfo_age',
-            'volinfo_jiguan',
-            'volinfo_live_address',
-            'volinfo_marriage',
-            'volinfo_idcard_type',
-            'volinfo_id_num',
-            'volinfo_birthday',
-            # 'volinfo_email',
-            'volinfo_graduate_school',
-            'volinfo_graduate_date',
-            'volinfo_education',
-            'volinfo_profession',
-            'volinfo_employer',
-            'volinfo_position',
-            'volinfo_mail_address',
-            'volinfo_zipcode',
-            'volinfo_contact_number',
-            # 'volinfo_cellphone',
-            'volinfo_service_area',
-            'volinfo_service_date',
-            'volinfo_skills',
-            'volinfo_service_time',
-            'volinfo_user'
-        )
 
 # 活动报名人信息
 # class CampaignPersonSerializer(serializers.ModelSerializer):
@@ -241,8 +367,9 @@ class VolunteerInformationSerializer(serializers.ModelSerializer):
 class AbilityTrainingSerializer(serializers.ModelSerializer):
 
     # slug_field是以外键的某个值作为关联
-    signup_user_list = VolunteerInformationSerializer(
-        many=True)
+    volunteers = UserSerializer(many=True, read_only=True)
+    volunteers_ids = serializers.PrimaryKeyRelatedField(many=True, read_only=False, queryset=User.objects.all(), source='volunteers')
+
     class Meta:
         model = AbilityTraining
         fields = (
@@ -254,5 +381,26 @@ class AbilityTrainingSerializer(serializers.ModelSerializer):
             'at_address',
             'at_counts',
             'at_sign_up_deadline',
-            'signup_user_list'
+            'volunteers',
+            'volunteers_ids'
         )
+        read_only_fields = (
+            'id',
+            'at_zhu_jiang_ren',
+            'at_theme',
+            'at_date',
+            'at_content',
+            'at_address',
+            'at_counts',
+            'at_sign_up_deadline',
+        )
+
+    def update(self, instance, validated_data):
+
+        # ...
+        validated_data['volunteers'] = filter(None, validated_data['volunteers'])
+        for volunteer in validated_data['volunteers']:
+            # user = User.objects.get(pk=campaign_members_id)
+            instance.volunteers.add(volunteer)
+
+        return instance

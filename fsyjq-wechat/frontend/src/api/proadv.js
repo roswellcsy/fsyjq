@@ -54,13 +54,22 @@ export function commitProadvform(
   })
 }
 
-export function getMyProAdv(username, token) { // 拉取用户信息
+export function getMyProAdvlist(username) { // 拉取用户信息
   return request({
     url: '/professonaladvice/', // 获取admin信息，带用户名参数
     method: 'get',
     params: {
-      username,
-      token
+      username
+    }
+  })
+}
+
+export function getMyProAdv(proadv_question_title) { // 拉取用户信息
+  return request({
+    url: '/professonaladvice/', // 获取admin信息，带用户名参数
+    method: 'get',
+    params: {
+      proadv_question_title
     }
   })
 }

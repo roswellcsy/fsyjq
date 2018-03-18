@@ -101,9 +101,9 @@ DATABASES = {
         },
 
         # 开发环境
-        'USER': 'root',
-        'PASSWORD': 'P@ssw0rd',
-        'HOST': 'localhost',
+        'USER': 'fsyjq',
+        'PASSWORD': 'Gdkyit2018%',
+        'HOST': 'rm-wz9ec4kz5ildi1t96o.mysql.rds.aliyuncs.com',
         'PORT': '3306',
         # 正式环境
         # 'USER': 'fsyjq',
@@ -154,10 +154,11 @@ STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-# Media files(jpg)
-MEDIA_URL = '/media/'
 
-MEDIA_ROOT = os.path.join(STATIC_ROOT, 'media')
+# Media files(jpg)
+# MEDIA_URL = '/media/'
+
+# MEDIA_ROOT = os.path.join(STATIC_ROOT, 'media')
 
 
 REST_FRAMEWORK = {
@@ -178,3 +179,31 @@ AUTH_USER_MODEL = 'api.User'
 JWT_AUTH = {
     'JWT_EXPIRATION_DELTA': datetime.timedelta(days=30),
 }
+
+# 七牛云对象存储配置
+
+QINIU_ACCESS_KEY = 'wzvjBgDiFHcFCC51s-mRSJDgZNZH-d1bj-2g6E-M'
+QINIU_SECRET_KEY = 'cVYKZjPrSeuLnU1HQOQ7br3JGzMa54VKMmAHVjYm'
+QINIU_BUCKET_NAME = 'fsyjq'
+QINIU_BUCKET_DOMAIN = 'fsyjq-static.roswellcsy.com'
+QINIU_SECURE_URL = False      #使用http 
+
+
+# PREFIX_URL = 'http://'
+# QINIU_BUCKET_DOMAIN + 
+
+MEDIA_URL = '/'
+MEDIA_ROOT = os.path.join(MEDIA_URL, '')
+
+DEFAULT_FILE_STORAGE = 'qiniustorage.backends.QiniuMediaStorage'
+
+# STATIC_URL = '/static/'
+
+# STATIC_ROOT = os.path.join(STATIC_URL, '')
+
+# # STATICFILES_DIRS = [
+# #     os.path.join(STATIC_URL, ''),
+# # ]
+
+
+# STATICFILES_STORAGE = 'qiniustorage.backends.QiniuStaticStorage'

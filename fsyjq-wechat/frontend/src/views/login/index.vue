@@ -6,8 +6,8 @@
     </div>
 
     <group>
-      <x-input title="账号" v-model="loginForm.username" placeholder="账号"></x-input>
-      <x-input title="密码" @keyup.enter.native="handleLogin" v-model="loginForm.password" placeholder="密码"></x-input>
+      <x-input title="账号" v-model="loginForm.username" placeholder="必填"></x-input>
+      <x-input title="密码" type="password" @keyup.enter.native="handleLogin" v-model="loginForm.password" placeholder="必填"></x-input>
     </group>
     <!-- <div class="tips">
         <span style="margin-left:40%;">请先登录</span>
@@ -26,6 +26,7 @@
 
 <script>
 import { Group, Cell, XInput, XButton } from 'vux'
+// import { volinfoinit } from '@/api/login'
 
 export default {
   name: 'login',
@@ -71,6 +72,18 @@ export default {
         // this.loading = false
         console.log('something wrong')
       })
+      // userinfoinit(username).then(response => { // mockserver返回20000和包在data的token，实际后端只返回token
+      //   // this.$router.push({ path: '/login' })
+      // }).catch(error => {
+      //   console.log(error)
+      //   // reject(error)
+      // })
+      // volinfoinit(this.loginForm.username, this.loginForm.password).then(response => { // mockserver返回20000和包在data的token，实际后端只返回token
+      //   // this.$router.push({ path: '/login' })
+      // }).catch(error => {
+      //   console.log(error)
+      //   // reject(error)
+      // })
     }
   }
 }

@@ -1,13 +1,13 @@
 <template>
-  <div id="login">
+  <div id="register">
     <div class="vux-demo">
       <img class="logo" src="../../assets/profile.png">
       <h1>注册</h1>
     </div>
 
     <group>
-      <x-input title="账号" v-model="RegisterForm.username" placeholder="必填"></x-input>
-      <x-input title="密码" v-model="RegisterForm.password" placeholder="请注意保管"></x-input>
+      <x-input title="账号" v-model="RegisterForm.username" placeholder="必填（建议使用手机号）"></x-input>
+      <x-input title="密码" type="password" v-model="RegisterForm.password" placeholder="请注意保管"></x-input>
     </group>
 
     <group style="padding:5px 20px;">
@@ -72,6 +72,18 @@ export default {
         console.log(error)
         // reject(error)
       })
+      // userinfoinit(username).then(response => { // mockserver返回20000和包在data的token，实际后端只返回token
+      //   // this.$router.push({ path: '/login' })
+      // }).catch(error => {
+      //   console.log(error)
+      //   // reject(error)
+      // })
+      // volinfoinit(username, password).then(response => { // mockserver返回20000和包在data的token，实际后端只返回token
+      //   // this.$router.push({ path: '/login' })
+      // }).catch(error => {
+      //   console.log(error)
+      //   // reject(error)
+      // })
       // this.$store.dispatch('Register', this.RegisterForm).then(() => {
       //   // this.loading = false
       //   this.$router.push({ path: '/login' })

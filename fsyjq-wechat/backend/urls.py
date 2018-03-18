@@ -23,12 +23,19 @@ from django.conf.urls.static import static
 
 router = DefaultRouter()
 router.register(r'campaign/published', api_views.CampaignPublishedViewSet, 'publishedCampaign')
+router.register(r'participate/campaign', api_views.MyCampaignViewSet, 'myCampaignlist')
+router.register(r'participate/volunteerservice', api_views.MyVolunteerServiceViewSet, 'myVolunteerservice')
+router.register(r'training/published', api_views.AbilityTrainingViewSet, 'training')
 router.register(r'userinformation', api_views.UserInformationViewSet, 'userinformation')
 router.register(r'policyqa', api_views.PolicyQAViewSet, 'policyqa')
 router.register(r'professonaladvice', api_views.ProfessionalAdviceViewSet, 'professonaladvice')
 router.register(r'volunteerinformation', api_views.VolunteerInformationViewSet, 'volunteerinformation')
 # router.register(r'campaignperson', api_views.CampaignPersonViewSet, 'campaignperson')
 router.register(r'user', api_views.UserViewSet, 'user')
+router.register(r'campaign/signup', api_views.CampaignSignUpViewSet)
+router.register(r'volserivce/signup', api_views.VolServiceSignUpViewSet)
+
+# router.register(r'campaign/signup', api_views.CampaignSignupViewSet.as_view())
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),

@@ -45,11 +45,14 @@ class UserChangeForm(forms.ModelForm):
 
 class UserInformationInline(admin.StackedInline):
     model = UserInformation
+    readonly_fields = ('user_information_volunteer',)
     verbose_name = '用户信息'
+    extra = 0
 
 class VolunteerInformationInline(admin.StackedInline):
     model = VolunteerInformation
     verbose_name = '志愿者信息'
+    extra = 0
 
 class UserAdmin(BaseUserAdmin):
     form = UserChangeForm
@@ -84,12 +87,12 @@ admin.site.register(User, UserAdmin)
 
 
 class PolicyQAAdmin(admin.ModelAdmin):
-    readonly_fields = ['qa_fullname', 'qa_sex', 'qa_age', 'qa_live_area', 'qa_cellphone', 
+    readonly_fields = ['qa_user', 'qa_fullname', 'qa_sex', 'qa_age', 'qa_live_area', 'qa_cellphone', 
                         'qa_occupation', 'qa_marriage', 'qa_ask_date', 'qa_title', 'qa_type', 'qa_content',
                         'qa_o2o', 'qa_ask_date']
     fieldsets = [
         ('咨询人信息', {'fields': [
-         'qa_fullname', 'qa_sex', 'qa_age', 'qa_live_area', 'qa_cellphone', 'qa_occupation', 'qa_marriage']}),
+         'qa_user', 'qa_fullname', 'qa_sex', 'qa_age', 'qa_live_area', 'qa_cellphone', 'qa_occupation', 'qa_marriage']}),
         ('咨询内容', {'fields': ['qa_title', 'qa_type', 'qa_content',
                              'qa_o2o', 'qa_ask_date']}),
         # 以上为前端填写内容
@@ -156,13 +159,6 @@ class CampaignPhotosInline(admin.TabularInline):
     extra = 1 #默认显示条目的数量
 
 
-class CampaignVolunteerInline(admin.TabularInline):
-    verbose_name = '报名志愿者清单'
-    verbose_name_plural = '报名志愿者清单'
-    model = Campaign.campaign_volunteers.through
-    # model = CampaignPerson
-    extra = 1 #默认显示条目的数量
-
 class CampaignMemberInline(admin.TabularInline):
     verbose_name = '报名人员清单'
     verbose_name_plural = '报名人员清单'
@@ -171,11 +167,19 @@ class CampaignMemberInline(admin.TabularInline):
     extra = 1 #默认显示条目的数量
 
 
+class CampaignVolunteerInline(admin.TabularInline):
+    verbose_name = '报名志愿者清单'
+    verbose_name_plural = '报名志愿者清单'
+    model = Campaign.campaign_volunteers.through
+    # model = CampaignPerson
+    extra = 1 #默认显示条目的数量
+
+
 class CampaignAdmin(admin.ModelAdmin):
     # readonly_fields = ['user_subscribe_time', 'nickname', 'user_city',
     #                    'user_country', 'user_province', 'user_language',
     #                    'user_subscribe_time']
-    inlines = [CampaignPhotosInline, CampaignVolunteerInline, CampaignMemberInline]
+    inlines = [CampaignPhotosInline, CampaignMemberInline, CampaignVolunteerInline]
     fieldsets = [
         ('活动信息', {'fields': ['campaign_name', 'campaign_type', 'campaign_date', 'campaign_signup_deadline', 'campaign_client', 'campaign_address',
                              'campaign_content', 'campaign_paid',
