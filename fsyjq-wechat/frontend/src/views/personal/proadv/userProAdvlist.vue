@@ -9,16 +9,21 @@
           <cell :title=list.proadv_question_title :value=list.proadv_status @click.native.prevent="setCurrenttitle($event)" link="/personal/userProAdv"></cell>
       </template>
     </group>
+    <template>
+      <group style="padding:5px 20px;">
+        <x-button type="primary" action-type="button" link="/proAdv/index">新增专业咨询</x-button>
+      </group>
+    </template>
   </div>
 </template>
 
 <script>
 import { getMyProAdvlist } from '@/api/proadv'
-import { Group, Cell, FormPreview } from 'vux'
+import { Group, Cell, FormPreview, XButton } from 'vux'
 // import { METHODS } from 'http';
 export default {
   name: 'myproadvlist',
-  components: { Group, Cell, FormPreview },
+  components: { Group, Cell, FormPreview, XButton },
   data() { // data()需要跟return
     return {
       lists: this.lists

@@ -25,22 +25,31 @@
             <cell title="邮箱" :value=content.user_information_email></cell>
           </template>
           <cell title="手机号" :value=content.user_information_cellphone></cell>
-          <template v-if="volid === null">
+          <template v-if="volinfo === null">
             <cell title="是否志愿者" value="否"></cell>
+            <cell title="志愿服务时数" value="无"></cell>
           </template>
-          <template v-else-if="volid !== null">
+          <template v-else-if="volinfo !== null">
             <cell title="是否志愿者" value="是"></cell>
+            <cell title="志愿服务时数" :value=volinfo.volinfo_service_time></cell>
           </template>
         </group>
       </template>
       <template v-else-if="content === null">
         <group title="个人信息">
           <cell title="账号" :value=username></cell>
-          <cell title="姓名" value=""></cell>
-          <cell title="性别" value=""></cell>
-          <cell title="邮箱" value=""></cell>
-          <cell title="手机号" value=""></cell>
-          <cell title="是否志愿者" value=""></cell>
+          <cell title="姓名" value="">请添加个人信息</cell>
+          <cell title="性别" value="">请添加个人信息</cell>
+          <cell title="邮箱" value="">请添加个人信息</cell>
+          <cell title="手机号" value="">请添加个人信息</cell>
+          <template v-if="volinfo === null">
+            <cell title="是否志愿者" value="">否</cell>
+            <cell title="志愿服务时数" value="">无</cell>
+          </template>
+          <template v-else-if="volinfo !== null">
+            <cell title="是否志愿者" value="">是</cell>
+            <cell title="志愿服务时数" :value=volinfo.volinfo_service_time></cell>
+          </template>
         </group>
       </template>
       <template v-if="content === null">

@@ -3,58 +3,81 @@
   <div id ='VolunteerModify'>
     <group>
       <cell title="籍贯" value="value">
-        <x-input v-model="volinfo.volinfo_jiguan"></x-input>
+        <x-input v-model="volinfo.volinfo_jiguan" placeholder="选填"></x-input>
       </cell>
       <cell title="住址">
-        <x-input v-model="volinfo.volinfo_live_address"></x-input>
+        <x-input v-model="volinfo.volinfo_live_address" placeholder="选填"></x-input>
       </cell>
-      <cell title="婚姻状况" value="value">
+      <!-- <cell title="婚姻状况" value="value">
         <x-input v-model="volinfo.volinfo_marriage"></x-input>
-      </cell>
-      <cell title="证件类型" value="value">
+      </cell> -->
+      <selector title="婚姻状况" placeholder="可选" v-model="volinfo.marriage" :options="marriageOption" @on-change="onChange" direction="right"></selector>
+      <!-- <cell title="证件类型" value="value">
         <x-input v-model="volinfo.volinfo_idcard_type" required=True></x-input>
-      </cell>
+      </cell> -->
+      <selector title="证件类型" placeholder="可选" v-model="volinfo.idcardtype" :options="idcardtypeOption" @on-change="onChange" direction="right"></selector>
       <cell title="证件号码" value="value">
-        <x-input v-model="volinfo.volinfo_id_num" required=True></x-input>
+        <x-input v-model="volinfo.volinfo_id_num" required></x-input>
       </cell>
-      <cell title="出生日期（年月日）" value="value">
+      <!-- <cell title="出生日期（年月日）" value="value">
         <x-input v-model="volinfo.volinfo_birthday"></x-input>
-      </cell>
+      </cell> -->
+      <datetime
+        v-model="volinfo.birthday"
+        @on-change="change"
+        title="出生日期（年月日）"
+        @on-cancel="log('cancel')"
+        @on-confirm="log('confirm')"
+        @on-hide="log('hide', $event)"
+        placeholder="选填"
+      >
+      </datetime>
       <cell title="毕业院校" value="value">
-        <x-input v-model="volinfo.volinfo_graduate_school"></x-input>
+        <x-input v-model="volinfo.volinfo_graduate_school" placeholder="选填"></x-input>
       </cell>
-      <cell title="毕业时间" value="value">
+      <!-- <cell title="毕业时间" value="value">
         <x-input v-model="volinfo.volinfo_graduate_date"></x-input>
-      </cell>
+      </cell> -->
+      <datetime
+        v-model="volinfo.graduatedate"
+        @on-change="change"
+        title="毕业时间"
+        @on-cancel="log('cancel')"
+        @on-confirm="log('confirm')"
+        @on-hide="log('hide', $event)"
+        placeholder="选填"
+      >
+      </datetime>
       <cell title="学历" value="value">
-        <x-input v-model="volinfo.volinfo_education"></x-input>
+        <x-input v-model="volinfo.volinfo_education" placeholder="选填"></x-input>
       </cell>
       <cell title="专业" value="value">
-        <x-input v-model="volinfo.volinfo_profession"></x-input>
+        <x-input v-model="volinfo.volinfo_profession" placeholder="选填"></x-input>
       </cell>
       <cell title="工作单位" value="value">
-        <x-input v-model="volinfo.volinfo_employer"></x-input>
+        <x-input v-model="volinfo.volinfo_employer" placeholder="选填"></x-input>
       </cell>
       <cell title="职务" value="value">
-        <x-input v-model="volinfo.volinfo_position"></x-input>
+        <x-input v-model="volinfo.volinfo_position" placeholder="选填"></x-input>
       </cell>
       <cell title="通讯地址" value="value">
-        <x-input v-model="volinfo.volinfo_mail_address"></x-input>
+        <x-input v-model="volinfo.volinfo_mail_address" placeholder="选填"></x-input>
       </cell>
       <cell title="邮编" value="value">
-        <x-input v-model="volinfo.volinfo_zipcode"></x-input>
+        <x-input v-model="volinfo.volinfo_zipcode" placeholder="选填"></x-input>
       </cell>
       <cell title="固定电话" value="value">
-        <x-input v-model="volinfo.volinfo_contact_number"></x-input>
+        <x-input v-model="volinfo.volinfo_contact_number" placeholder="选填"></x-input>
       </cell>
-      <cell title="志愿服务时间" value="value">
+      <!-- <cell title="志愿服务时间" value="value">
         <x-input v-model="volinfo.volinfo_service_date" required=True></x-input>
-      </cell>
+      </cell> -->
+      <selector title="志愿服务时间" placeholder="可选" v-model="volinfo.servicedate" :options="servicedateOption" @on-change="onChange" direction="right"></selector>
       <cell title="志愿服务区" value="value">
-        <x-input v-model="volinfo.volinfo_service_area"></x-input>
+        <x-input v-model="volinfo.volinfo_service_area" placeholder="选填"></x-input>
       </cell>
       <cell title="技能" value="value">
-        <x-textarea v-model="volinfo.volinfo_skills"></x-textarea>
+        <x-textarea v-model="volinfo.volinfo_skills" placeholder="选填"></x-textarea>
       </cell>
     </group>
     <group style="padding:5px 20px;">
@@ -64,11 +87,11 @@
 </template>
 
 <script>
-import { Group, Cell, XInput, XButton, XTextarea } from 'vux'
+import { Group, Cell, XInput, XButton, XTextarea, Selector, Datetime } from 'vux'
 import { commitvolmodifyform, getVolinfo } from '@/api/volunteer'
 export default {
   name: 'volunteerModify',
-  components: { Group, Cell, XInput, XButton, XTextarea },
+  components: { Group, Cell, XInput, XButton, XTextarea, Selector, Datetime },
   data() {
     return {
       // volinfo: {
@@ -91,7 +114,43 @@ export default {
       //   servicearea: '',
       //   skills: ''
       // },
-      volinfo: this.volinfo
+      volinfo: this.volinfo,
+      marriageOption: [{
+        key: '1',
+        value: '未婚'
+      }, {
+        key: '2',
+        value: '已婚'
+      }, {
+        key: '3',
+        value: '离异'
+      }, {
+        key: '4',
+        value: '丧偶'
+      }],
+      idcardtypeOption: [{
+        key: '1',
+        value: '身份证'
+      }, {
+        key: '2',
+        value: '护照'
+      }, {
+        key: '3',
+        value: '警官证'
+      }, {
+        key: '4',
+        value: '军官证'
+      }],
+      servicedateOption: [{
+        key: '1',
+        value: '法定休息日'
+      }, {
+        key: '2',
+        value: '工作日'
+      }, {
+        key: '3',
+        value: '不限'
+      }]
     }
   },
   created() {
@@ -156,6 +215,16 @@ export default {
         console.log(error)
         // reject(error)
       })
+    },
+    onChange(val) {
+      // console.log(val)
+      console.log(val)
+    },
+    log(str1, str2 = '') {
+      console.log(str1, str2)
+    },
+    change(value) {
+      console.log('change', value)
     }
   }
 }

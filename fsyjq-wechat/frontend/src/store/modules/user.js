@@ -10,7 +10,7 @@ const user = {
     sex: '',
     email: '',
     cellphone: '',
-    volornot: '',
+    // volornot: '',
     // last_login: '',
     // is_admin: '',
     user_id: ''
@@ -51,10 +51,10 @@ const user = {
       state.email = email
       window.localStorage.setItem('email', email)
     },
-    SET_VOLORNOT: (state, volornot) => {
-      state.volornot = volornot
-      window.localStorage.setItem('volornot', volornot)
-    },
+    // SET_VOLORNOT: (state, volornot) => {
+    //   state.volornot = volornot
+    //   window.localStorage.setItem('volornot', volornot)
+    // },
     SET_USERID: (state, user_id) => {
       state.user_id = user_id
       window.localStorage.setItem('user_id', user_id)
@@ -131,7 +131,7 @@ const user = {
           commit('SET_SEX', r.user_information_sex)
           commit('SET_CELLPHONE', r.user_information_cellphone)
           commit('SET_EMAIL', r.user_information_email)
-          commit('SET_VOLORNOT', r.user_information_volunteer)
+          // commit('SET_VOLORNOT', r.user_information_volunteer)
           commit('SET_USERINFOID', r.id)
           resolve(response)
         }).catch(error => {

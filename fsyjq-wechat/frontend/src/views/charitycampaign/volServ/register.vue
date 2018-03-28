@@ -20,24 +20,45 @@
       <cell title="住址" value="value">
         <x-input v-model="volinfo.liveaddress" placeholder="选填"></x-input>
       </cell>
-      <cell title="婚姻状况" value="value">
-        <x-input v-model="volinfo.marriage" placeholder="必填"></x-input>
-      </cell>
-      <cell title="证件类型" value="value">
-        <x-input v-model="volinfo.idcardtype" placeholder="必填"></x-input>
-      </cell>
+      <!-- <cell title="婚姻状况" value="value">
+        <x-input v-model="volinfo.marriage" placeholder="必填" required></x-input>
+      </cell> -->
+      <selector title="婚姻状况" :placeholder="volinfo.marriage" v-model="volinfo.marriage" :options="marriageOption" @on-change="onChange" direction="right"></selector>
+      <!-- <cell title="证件类型" value="value">
+        <x-input v-model="volinfo.idcardtype" placeholder="必填" required></x-input>
+      </cell> -->
+      <selector title="证件类型" placeholder="可选" v-model="volinfo.idcardtype" :options="idcardtypeOption" @on-change="onChange" direction="right"></selector>
       <cell title="证件号码" value="value">
         <x-input v-model="volinfo.idnum" placeholder="选填"></x-input>
       </cell>
-      <cell title="出生日期（年月日）" value="value">
+      <!-- <cell title="出生日期（年月日）" value="value">
         <x-input v-model="volinfo.birthday" placeholder="选填"></x-input>
-      </cell>
+      </cell> -->
+      <datetime
+        v-model="volinfo.birthday"
+        @on-change="change"
+        title="出生日期（年月日）"
+        @on-cancel="log('cancel')"
+        @on-confirm="log('confirm')"
+        @on-hide="log('hide', $event)"
+        min-year=1949
+      >
+      </datetime>
       <cell title="毕业院校" value="value">
         <x-input v-model="volinfo.graduateschool" placeholder="选填"></x-input>
       </cell>
-      <cell title="毕业时间" value="value">
+      <!-- <cell title="毕业时间" value="value">
         <x-input v-model="volinfo.graduatedate" placeholder="选填"></x-input>
-      </cell>
+      </cell> -->
+      <datetime
+        v-model="volinfo.graduatedate"
+        @on-change="change"
+        title="毕业时间"
+        @on-cancel="log('cancel')"
+        @on-confirm="log('confirm')"
+        @on-hide="log('hide', $event)"
+      >
+      </datetime>
       <cell title="学历" value="value">
         <x-input v-model="volinfo.education" placeholder="选填"></x-input>
       </cell>
@@ -59,9 +80,10 @@
       <cell title="固定电话" value="value">
         <x-input v-model="volinfo.contact" placeholder="选填"></x-input>
       </cell>
-      <cell title="志愿服务时间" value="value">
-        <x-input v-model="volinfo.servicedate" placeholder="必填"></x-input>
-      </cell>
+      <!-- <cell title="志愿服务时间" value="value">
+        <x-input v-model="volinfo.servicedate" placeholder="必填" required></x-input>
+      </cell> -->
+      <selector title="志愿服务时间" placeholder="可选" v-model="volinfo.servicedate" :options="servicedateOption" @on-change="onChange" direction="right"></selector>
       <cell title="志愿服务区" value="value">
         <x-input v-model="volinfo.servicearea" placeholder="选填"></x-input>
       </cell>
@@ -76,11 +98,11 @@
 </template>
 
 <script>
-import { Group, Cell, XInput, XButton, XTextarea } from 'vux'
+import { Group, Cell, XInput, XButton, XTextarea, Selector, Datetime } from 'vux'
 import { commitvolregisterform } from '@/api/volunteer'
 export default {
   name: 'volunteerRegister',
-  components: { Group, Cell, XInput, XButton, XTextarea },
+  components: { Group, Cell, XInput, XButton, XTextarea, Selector, Datetime },
   data() {
     return {
       volinfo: {
@@ -102,7 +124,43 @@ export default {
         servicedate: '',
         servicearea: '',
         skills: ''
-      }
+      },
+      marriageOption: [{
+        key: '1',
+        value: '未婚'
+      }, {
+        key: '2',
+        value: '已婚'
+      }, {
+        key: '3',
+        value: '离异'
+      }, {
+        key: '4',
+        value: '丧偶'
+      }],
+      idcardtypeOption: [{
+        key: '1',
+        value: '身份证'
+      }, {
+        key: '2',
+        value: '护照'
+      }, {
+        key: '3',
+        value: '警官证'
+      }, {
+        key: '4',
+        value: '军官证'
+      }],
+      servicedateOption: [{
+        key: '1',
+        value: '法定休息日'
+      }, {
+        key: '2',
+        value: '工作日'
+      }, {
+        key: '3',
+        value: '不限'
+      }]
     }
   },
   methods: {
@@ -152,6 +210,16 @@ export default {
         console.log(error)
         // reject(error)
       })
+    },
+    onChange(val) {
+      // console.log(val)
+      console.log(val)
+    },
+    log(str1, str2 = '') {
+      console.log(str1, str2)
+    },
+    change(value) {
+      console.log('change', value)
     }
   }
 }

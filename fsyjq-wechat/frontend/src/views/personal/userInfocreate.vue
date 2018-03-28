@@ -7,9 +7,13 @@
         <cell title="姓名">
           <x-input v-model="userinfo.name"></x-input>
         </cell>
-        <cell title="性别">
-          <x-input v-model="userinfo.sex"></x-input>
-        </cell>
+        <!-- <cell title="性别"> -->
+          <!-- <x-input v-model="userinfo.sex"></x-input> -->
+        <!-- <group title="性别"> -->
+          <!-- <picker :data='sexoption' :columns=1 v-model="userinfo.sex" @on-change='change'></picker> -->
+        <selector title="性别" v-model="userinfo.sex" :options="sexoption" @on-change="onChange"></selector>
+        <!-- </group> -->
+        <!-- </cell> -->
         <cell title="邮箱">
           <x-input v-model="userinfo.email"></x-input>
         </cell>
@@ -27,11 +31,11 @@
 </template>
 
 <script>
-import { Group, Cell, Blur, XButton, XInput } from 'vux'
+import { Group, Cell, Blur, XButton, XInput, Picker, Selector } from 'vux'
 import { commituserinfocreateform } from '@/api/login'
 export default {
   name: 'userInfomodify',
-  components: { Group, Cell, Blur, XButton, XInput },
+  components: { Group, Cell, Blur, XButton, XInput, Picker, Selector },
   data() {
     return {
       userinfo: {
@@ -41,7 +45,16 @@ export default {
         email: '',
         cellphone: '',
         volornot: ''
-      }
+      },
+      sexoption: [{
+        value: '男',
+        key: '1'
+      }, {
+        value: '女',
+        key: '2'
+      }]
+      // test: [{ key: '1', value: '男' }, { key: '2', value: '女' }],
+      // testvalue: []
       // content: this.content
     }
   },
@@ -79,6 +92,10 @@ export default {
         console.log(error)
         // reject(error)
       })
+    },
+    onChange(val) {
+      // console.log(val)
+      console.log(this.userinfo.sex)
     }
   }
 }

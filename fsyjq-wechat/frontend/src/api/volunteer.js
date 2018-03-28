@@ -154,7 +154,7 @@ export function commitvolmodifyform(
   volinfo_service_area,
   volinfo_service_date,
   volinfo_skills
-) { // 提交政策咨询表单
+) { // 提交志愿者信息修改表单
   return request({
     // url: '/user/login', // 根据实际修改
     url: '/volunteerinformation/' + vol_info_id + '/',
