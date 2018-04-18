@@ -171,10 +171,21 @@ class PolicyQA(models.Model):
     qa_answer = models.TextField(verbose_name='回答', null=True, blank=True)
 
     qa_answer_date = models.DateTimeField(
-        verbose_name='回答时间', auto_now_add=True)
+        verbose_name='回答时间', auto_now=True)
+
+    def ask_date(self):
+        return self.qa_ask_date.date()
+    ask_date.short_description = '提问日期'
 
     # 咨询状态,默认False未回答,后台回答后可选True
     qa_status = models.BooleanField(default=False, verbose_name='咨询状态')
+
+    def status(self):
+        if self.qa_status == True:
+            return '完成'
+        elif self.qa_status == False:
+            return '待跟进'
+    status.short_description = '咨询状态'
     # 与用户关系是一对一
     qa_user = models.ForeignKey(
         User, related_name='policyqas', verbose_name='用户')
@@ -347,7 +358,7 @@ class ProfessionalAdvice(models.Model):
             return '完成'
         elif self.proadv_status == False:
             return '待跟进'
-
+    status.short_description = '完成状态'
 
 # 用户基本信息
 
@@ -466,7 +477,7 @@ class VolunteerInformation(models.Model):
     volinfo_skills = models.CharField(
         max_length=50, blank=True, verbose_name='技能')
     # 累计志愿服务时数
-    volinfo_service_time = models.PositiveIntegerField(default=0, verbose_name='志愿活动认证时数')
+    volinfo_service_time = models.DecimalField(default=0, max_digits=5, decimal_places=1, verbose_name='志愿活动认证时数')
     volinfo_update_time = models.DateTimeField(auto_now=True)
 
 # 公益活动信息，需要后台上传图片

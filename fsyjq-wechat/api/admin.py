@@ -97,10 +97,10 @@ class PolicyQAAdmin(admin.ModelAdmin):
                              'qa_o2o', 'qa_ask_date']}),
         # 以上为前端填写内容
         ('答复内容', {'fields': [
-         'qa_answer', 'qa_answer_date']}),
+         'qa_answer', 'qa_answer_date', 'qa_status']}),
     ]
-    list_display = ('qa_title', 'qa_type', 'qa_fullname',
-                    'qa_o2o', 'qa_status')
+    list_display = ('qa_title', 'ask_date', 'qa_type', 'qa_fullname',
+                    'qa_o2o', 'status')
 
 
 admin.site.register(PolicyQA, PolicyQAAdmin)
