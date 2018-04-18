@@ -171,7 +171,7 @@ class PolicyQA(models.Model):
     qa_answer = models.TextField(verbose_name='回答', null=True, blank=True)
 
     qa_answer_date = models.DateTimeField(
-        verbose_name='回答时间', null=True, blank=True)
+        verbose_name='回答时间', auto_now_add=True)
 
     # 咨询状态,默认False未回答,后台回答后可选True
     qa_status = models.BooleanField(default=False, verbose_name='咨询状态')

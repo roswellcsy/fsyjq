@@ -1,9 +1,9 @@
-<!--用于展示公益活动详细信息 -->
+<!--用于公益活动报名 -->
 <!-- 需要动态从后台读取轮播图片，待处理 -->
 <template>
-  <div id ='CampaignDetail'>
+  <div id ='CampaignSignup'>
     <!-- <group-title>自动轮播</group-title> -->
-    <swiper :list=demoList auto style="width:100%;margin:0 auto;" height="180px" dots-class="custom-bottom" dots-position="center"></swiper>
+    <swiper :list=demo03_list auto style="width:100%;margin:0 auto;" height="180px" dots-class="custom-bottom" dots-position="center"></swiper>
     <group>
         <cell title='活动名称:' :value=content[0].campaign_name></cell>
         <cell title='活动分类:' :value=content[0].campaign_type></cell>
@@ -18,38 +18,42 @@
         <cell title='可报名参与人数:' :value=content[0].campaign_counts></cell>
         <cell title='可报名志愿者人数:' :value=content[0].campaign_vol_counts></cell> 
     </group>
+    <!-- <group>
+      <span>活动后台ID：{{ content[0].id }}</span>
+    </group> -->
     <group>
-      <!-- <template v-for="img in demoList">
-        <cell title="测试" :value=img.photo_path></cell>
-      </template> -->
+        
     </group>
     <group style="padding:5px 20px;">
       <x-button type="primary" action-type="button" @click.native.prevent="handleSignup">报名</x-button>
+    </group>
+    <group>
+      <cell>活动报名</cell>
     </group>
 
   </div>
 </template>
 
 <script>
-import { fetchCurrentcampaign, campaignSignup } from '@/api/campaign'
+import { fetchCurrentcampaign } from '@/api/campaign'
 import { Swiper, Group, Cell, Datetime, XButton } from 'vux'
 
-// const imgList = [
-//   'http://placeholder.qiniudn.com/800x300/FF3B3B/ffffff',
-//   'http://placeholder.qiniudn.com/800x300/FFEF7D/ffffff',
-//   'http://placeholder.qiniudn.com/800x300/8AEEB1/ffffff'
-//   // 'http://localhost:8000/media/media/IMG_6061_6gUn15p.JPG'
-// ]
+const imgList = [
+  'http://placeholder.qiniudn.com/800x300/FF3B3B/ffffff',
+  'http://placeholder.qiniudn.com/800x300/FFEF7D/ffffff',
+  'http://placeholder.qiniudn.com/800x300/8AEEB1/ffffff',
+  'http://localhost:8000/media/media/IMG_6061_6gUn15p.JPG'
+]
 // const imgList = []
 
 // for (link in content[0].photos) {
 //   imgList.push(link.photo_path)
 // }
 // const demoList = []
-// const demoList = imgList.map((one, index) => ({
-//   url: 'javascript:',
-//   img: one
-// }))
+const demoList = imgList.map((one, index) => ({
+  url: 'javascript:',
+  img: one
+}))
 
 export default {
   name: 'campaignDetail',
@@ -57,18 +61,16 @@ export default {
   // const imgList : new Array(),
   data() {
     return {
-      // imagList: this.imagList,
-      // demo03_list: demoList,
       // imgList: this.imgList,
-
-      demoList: this.demoList,
+      demo03_list: demoList,
+      // demo_list: this.demoList1,
       content: this.content
     }
   },
   // computed: {
   //   fetchImagelist: function() {
   //     const imgList = []
-  //     for (this.img in this.imagList) {
+  //     for (this.img in this.content[0].photos) {
   //       imgList.push(this.img)
   //     }
   //     // const demoList1 = imgList.map((one, index) => ({
@@ -89,24 +91,12 @@ export default {
     fetchData() {
       fetchCurrentcampaign(window.localStorage.getItem('clicktitle')).then(response => {
         this.content = response
-        this.imagList = this.content[0].photos
-        this.swiperList = []
-        console.log(this.imagList[0])
-        for (var i = 0; i < this.imagList.length; i++) {
-          var imag = this.imagList[i].photo_path
-          console.log(imag)
-          this.swiperList.push(imag)
-        }
-        this.demoList = this.swiperList.map((one, index) => ({
-          url: 'javascript:',
-          img: one
-        }))
         // window.localStorage.setItem('campaignlists', this.lists)
       }).catch(err => {
         // this.fetchSuccess = false
         console.log(err)
       })
-    },
+    }
     // fetchImagelist() {
     //   const imgList = []
     //   for (this.img in this.content[0].photos) {
@@ -117,16 +107,11 @@ export default {
     //   //   img: one
     //   // }))
     //   return imgList
-    // },
-    handleSignup() {
-      console.log('点击报名')
-      campaignSignup(this.content[0].id, window.localStorage.getItem('user_id')).then(response => { // mockserver返回20000和包在data的token，实际后端只返回token
-        this.$router.push({ path: '/campaign/list' })
-      }).catch(error => {
-        console.log(error)
-        // reject(error)
-      })
-    }
+    // }
+    // handleSignup() {
+
+    //   console.log('do something')
+    // }
   }
 }
 </script>
