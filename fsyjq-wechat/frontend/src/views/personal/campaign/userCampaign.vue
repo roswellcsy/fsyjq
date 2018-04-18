@@ -3,7 +3,7 @@
 <template>
   <div id ='MyCampaign'>
     <!-- <group-title>自动轮播</group-title> -->
-    <swiper :list=demo03_list auto style="width:100%;margin:0 auto;" height="180px" dots-class="custom-bottom" dots-position="center"></swiper>
+    <swiper :list=demoList auto style="width:100%;margin:0 auto;" height="180px" dots-class="custom-bottom" dots-position="center"></swiper>
     <group>
         <cell title='活动名称:' :value=content[0].campaign_name></cell>
         <cell title='活动分类:' :value=content[0].campaign_type></cell>
@@ -35,22 +35,22 @@
 import { fetchCurrentcampaign } from '@/api/campaign'
 import { Swiper, Group, Cell, Datetime, XButton } from 'vux'
 
-const imgList = [
-  'http://placeholder.qiniudn.com/800x300/FF3B3B/ffffff',
-  'http://placeholder.qiniudn.com/800x300/FFEF7D/ffffff',
-  'http://placeholder.qiniudn.com/800x300/8AEEB1/ffffff',
-  'http://localhost:8000/media/media/IMG_6061_6gUn15p.JPG'
-]
+// const imgList = [
+//   'http://placeholder.qiniudn.com/800x300/FF3B3B/ffffff',
+//   'http://placeholder.qiniudn.com/800x300/FFEF7D/ffffff',
+//   'http://placeholder.qiniudn.com/800x300/8AEEB1/ffffff',
+//   'http://localhost:8000/media/media/IMG_6061_6gUn15p.JPG'
+// ]
 // const imgList = []
 
 // for (link in content[0].photos) {
 //   imgList.push(link.photo_path)
 // }
-// const demoList = []
-const demoList = imgList.map((one, index) => ({
-  url: 'javascript:',
-  img: one
-}))
+// // const demoList = []
+// const demoList = imgList.map((one, index) => ({
+//   url: 'javascript:',
+//   img: one
+// }))
 
 export default {
   name: 'mycampaign',
@@ -59,7 +59,8 @@ export default {
   data() {
     return {
       // imgList: this.imgList,
-      demo03_list: demoList,
+      // demo03_list: demoList,
+      demoList: this.demoList,
       // demo_list: this.demoList1,
       content: this.content
     }
@@ -88,6 +89,18 @@ export default {
     fetchData() {
       fetchCurrentcampaign(window.localStorage.getItem('clicktitle')).then(response => {
         this.content = response
+        this.imagList = this.content[0].photos
+        this.swiperList = []
+        console.log(this.imagList[0])
+        for (var i = 0; i < this.imagList.length; i++) {
+          var imag = this.imagList[i].photo_path
+          console.log(imag)
+          this.swiperList.push(imag)
+        }
+        this.demoList = this.swiperList.map((one, index) => ({
+          url: 'javascript:',
+          img: one
+        }))
         // window.localStorage.setItem('campaignlists', this.lists)
       }).catch(err => {
         // this.fetchSuccess = false

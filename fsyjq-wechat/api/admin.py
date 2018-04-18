@@ -89,7 +89,7 @@ admin.site.register(User, UserAdmin)
 class PolicyQAAdmin(admin.ModelAdmin):
     readonly_fields = ['qa_user', 'qa_fullname', 'qa_sex', 'qa_age', 'qa_live_area', 'qa_cellphone', 
                         'qa_occupation', 'qa_marriage', 'qa_ask_date', 'qa_title', 'qa_type', 'qa_content',
-                        'qa_o2o', 'qa_ask_date']
+                        'qa_o2o', 'qa_ask_date', 'qa_answer_date']
     fieldsets = [
         ('咨询人信息', {'fields': [
          'qa_user', 'qa_fullname', 'qa_sex', 'qa_age', 'qa_live_area', 'qa_cellphone', 'qa_occupation', 'qa_marriage']}),
